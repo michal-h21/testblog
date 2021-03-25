@@ -1,0 +1,13 @@
+{
+  "author": "Michal Hoftich",
+  "email": "michal.h21@gmail.com",
+  "tex_title": "tex_title",
+  "_extensions": [ "cookiecutter.extensions.SlugifyExtension"],
+  "project_slug": "{{ cookiecutter.tex_title | slugify }}",
+  "vars": {
+    "tex_title": "{{'{' + cookiecutter.tex_title.replace('_','\\_') + '}'}}",
+    "tex_author": "{{'{' + cookiecutter.author+ '}'}}"
+  }
+}
+
+
