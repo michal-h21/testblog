@@ -1,0 +1,13 @@
+local outdir = "../../html_root"
+
+filter_settings "staticsite" {
+  site_root = outdir,
+  map = {
+    [".css$"] =  "/css/"
+  },
+}
+
+if mode=="publish" then
+  Make:enable_extension "staticsite"
+  Make:htlatex {}
+end
