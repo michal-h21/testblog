@@ -1,4 +1,4 @@
-local outdir = "../../jekyll_root/_posts"
+local outdir = "../../docs/_posts"
 
 filter_settings "staticsite" {
   site_root = outdir,
