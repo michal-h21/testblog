@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage{hyperref}
-\usepackage{markdown}
+% \usepackage{markdown}
 \title{Blogging in LaTeX, 2021 edition}
 \author{Michal Hoftich}
 \begin{document}
@@ -12,9 +12,20 @@ This is first in series of posts about blogging with \LaTeX\ using
 \href{https://tug.org/tex4ht/}{\TeX4ht}. I've set it up as a showcase of
 \TeX4ht features for \href{https://tug.org/tug2021/}{TUG 2021}.
 
+
+Overview of the set up is following:
+
+\begin{enumerate}
+\item Use \TeX4ht to produce files suitable for static site generators.
+\item Use static site generator, like \href{https://jekyllrb.com/}{Jekyll}
+or \href{https://gohugo.io/}{Hugo}
+, to produce a web site.
+\item Use Github Actions to automatically compile \LaTeX\ files pushed
+to the repository, and recompile the web site. 
+\end{enumerate}
+
 In the following posts, I will tell more on how to set up an automatic
 blog publishing using Github Pages and Github Actions.
-
 
 % \end{markdown*}
 
