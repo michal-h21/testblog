@@ -27,6 +27,7 @@ url: "https://www.kodymirus.cz" # the base hostname & protocol for your site, e.
 twitter_username: michalh21
 github_username:  michal-h21
 show_excerpts: true
+excerpt_separator: "</p>"
 
 # Build settings
 theme: minima
@@ -35,7 +36,7 @@ theme: minima
 
 plugins:
   - jekyll-feed
-  - jekyll-include-cache
+  # - jekyll-include-cache
 
 # Exclude from processing.
 # The following items will not be processed, by default.
