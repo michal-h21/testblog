@@ -4,7 +4,7 @@ filter_settings "staticsite" {
   site_root = outdir,
   header = {
      layout="post",
-     updated = function(parameters)
+     date = function(parameters)
        return os.date("!%Y-%m-%d %T", parameters.time)
      end
   },
