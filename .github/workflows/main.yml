@@ -1,0 +1,19 @@
+name: CI 
+on: [push] 
+jobs: 
+  build: 
+   runs-on: ubuntu-latest 
+   steps: 
+   - uses: actions/checkout@v2 
+   - name: Run make4ht 
+     uses: docker://ghcr.io/michal-h21/make4ht-action:latest 
+   - name: restore timestamps
+     uses: chetan/git-restore-mtime-action@release
+   - name: Checkout siterebuild
+     uses: actions/checkout@v2
+     with:
+      repository:  michal-h21/siterebuild 
+      path: siterebuild
+   - name: try siterebuild
+     run: |
+       siterebuild/siterebuild
