@@ -5,6 +5,8 @@ then
 else
   SITEREBUILD=../siterebuild/siterebuild
 fi
+
+$SITEREBUILD -l debug
 for i in `$SITEREBUILD -o %dir@%file`
 do
   texdir=`echo $i | cut -d@ -f1 -`
