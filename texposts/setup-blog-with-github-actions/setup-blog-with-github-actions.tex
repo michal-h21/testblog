@@ -1,0 +1,17 @@
+\documentclass{article}
+\usepackage{hyperref}
+\title{Setup blog with Github Actions}
+\author{Michal Hoftich}
+\begin{document}
+\maketitle
+
+Git doesn't keep modification time in the repository. As we want to compile only modified
+\LaTeX\ files, we need to restore the modification times. 
+Thankfully, this is possible thanks to 
+\href{https://github.com/chetan/git-restore-mtime-action}{git-restore-mtime action}
+which can restore modification times from the file commit times.
+
+\begin{verbatim}
+\end{verbatim}
+
+\end{document}
