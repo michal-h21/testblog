@@ -15,4 +15,4 @@ jobs:
    - name: Run make4ht 
      uses: docker://ghcr.io/michal-h21/make4ht-action:latest 
      env: 
-       command: "./siterebuild/siterebuild -l debug" 
+       command: "cd texposts && ./siterebuild/siterebuild -l debug" 
