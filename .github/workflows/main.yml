@@ -24,7 +24,7 @@ jobs:
        command: cd texposts &&  ./rebuild.sh
        # command: "cd texposts && ../siterebuild/siterebuild -l debug && ls -lt blogging-in-latex-2021-edition && ls -lt ../docs/_posts/" 
    - name: Autocommit generated files
-    uses: stefanzweifel/git-auto-commit-action@v4
-    with:
-      commit_message: Save generated files
-      file_pattern: docs/*
+     uses: stefanzweifel/git-auto-commit-action@v4
+     with:
+       commit_message: Save generated files
+       file_pattern: docs/*
