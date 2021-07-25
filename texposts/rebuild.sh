@@ -1,5 +1,11 @@
 #!/bin/env bash
-for i in `siterebuild -o %dir@%file`
+if command -v siterebuild &> /dev/null
+then
+  SITEREBUILD=siterebuild
+else
+  SITEREBUILD=../siterebuild/siterebuild
+fi
+for i in `$SITEREBUILD -o %dir@%file`
 do
   texdir=`echo $i | cut -d@ -f1 -`
   texfile=`echo $i | cut -d@ -f2 -`
