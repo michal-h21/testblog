@@ -2,6 +2,7 @@
 \usepackage{hyperref}
 \title{How to Blog With TeX4ht}
 \author{Michal Hoftich}
+\def\makeht{\texttt{make4ht}}
 \begin{document}
 \maketitle
 
@@ -9,6 +10,78 @@ This post is a part of series on how to set up
 \href{https://tug.org/tex4ht/}{TeX4ht}, \LaTeX\ to XML converter
 for use with Static Site Generators. We will discuss
 how to configure it to produce suitable HTML in this article.
+
+\section{Static site extension for make4ht}
+
+Conversion process used by \TeX4ht is quite complex. It needs to 
+compile \LaTeX\ file to a DVI file with special instructions 
+inserted by \texttt{tex4ht.sty} package. This DVI file is then 
+processed by \texttt{tex4ht} command, that produces HTML or XML files,
+and instructions for the last command, \texttt{t4ht}, which produces
+CSS files and pictures. Traditionally, this process was handled 
+by the \texttt{htlatex} script, but it had many weaknesses, so 
+the currently recommended build tool is \makeht. 
+You can find some details about \texttt{htlatex} and \makeht\ 
+differences in the 
+\href{https://www.kodymirus.cz/make4ht/make4ht-doc.html#difference-of-texttt-makeht}
+{\makeht\ documentation}.
+
+Among features \makeht\ has, are Lua build files, post-processing filters, and extension support. 
+Filters can clean-up the generated files, and fix some common issues that 
+are hard to fix on the \TeX\ level. They can be required either from 
+the Lua build files, or using extensions. 
+
+\makeht\ provides an extension that aims at support for static site generators. We can show the usage
+on a simple example:
+
+\begin{verbatim}
+
+\documentclass{article}
+\begin{document}
+\title{Hello world test}
+\author{Michal}
+\maketitle
+
+This is my test post.
+\end{document}
+\end{verbatim}
+
+You can use a following command to generate file suitable for static site generators:
+
+\begin{verbatim}
+make4ht -f html5+staticsite filename.tex
+\end{verbatim}
+
+By default, \texttt{staticsite} extension produces file named as \verb|YYYY-MM-DD-<filename>|,
+this example can be named as \texttt{2021-07-25-filename.html}. It is not 
+ordinary HTML file, but it contains YAML header with document metadata:
+
+\begin{verbatim}
+---
+meta:
+- charset: 'utf-8'
+- name: 'generator'
+  content: 'TeX4ht (https://tug.org/tex4ht/)'
+- name: 'viewport'
+  content: 'width=device-width,initial-scale=1'
+- name: 'src'
+  content: '2021-07-18-hello-world.tex'
+time: 1626619562
+updated: 1627244699
+styles:
+- '2021-07-18-hello-world.css'
+title: 'Hello world test'
+---
+
+   
+<!--  l. 7  --><p class='indent'>   This is my test post.
+</p>
+    
+\end{verbatim}
+
+
+- .published file
+
 
 
 
