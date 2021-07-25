@@ -1,10 +1,10 @@
 #!/bin/sh
-# if command -v siterebuild &> /dev/null
-# then
-#   SITEREBUILD=siterebuild
-# else
+if ! command -v siterebuild &> /dev/null
+then
 SITEREBUILD=../siterebuild/siterebuild
-# fi
+else
+SITEREBUILD=siterebuild
+fi
 
 $SITEREBUILD -l debug
 for i in `$SITEREBUILD -o %dir@%file`
