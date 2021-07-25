@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/sh
 if command -v siterebuild &> /dev/null
 then
   SITEREBUILD=siterebuild
