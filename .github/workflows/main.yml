@@ -20,5 +20,5 @@ jobs:
       path: siterebuild
    - name: Run make4ht 
      uses: docker://ghcr.io/michal-h21/make4ht-action:latest 
-     env: 
+     env: # we must go to the directory with tex posts and execute siterebuild
        command: "cd texposts && ../siterebuild/siterebuild -l debug && ls -lt blogging-in-latex-2021-edition && ls -lt ../docs/_posts/" 
