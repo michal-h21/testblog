@@ -11,7 +11,12 @@ Thankfully, this is possible thanks to
 \href{https://github.com/chetan/git-restore-mtime-action}{git-restore-mtime action}
 which can restore modification times from the file commit times.
 
+For the correct function, it needs the following instruction in the workflow file:
+
 \begin{verbatim}
+- uses: actions/checkout@v2
+  with:
+    fetch-depth: 0
 \end{verbatim}
 
 \end{document}
