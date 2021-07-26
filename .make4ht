@@ -1,5 +1,17 @@
 local outdir = "../../docs/_posts"
 
+local domfilter = require "make4ht-domfilter"
+
+-- remove the \maketitle environment from the HTML file, title will be inserted in the template
+local domprocess = domfilter{function(dom)
+  local maketitles = dom:query_selector(".maketitle")
+  for _, el in ipairs(maketitles) do
+    print "removing maketitle"
+    el:remove_node()
+  end
+  return dom
+end}
+
 filter_settings "staticsite" {
   site_root = outdir,
   header = {
@@ -9,11 +21,14 @@ filter_settings "staticsite" {
      end
   },
   map = {
-    [".css$"] =  "../../jekyll_root/css/"
+    [".css$"] =  "../../docs/css/"
   },
 }
 
 if mode=="publish" then
   Make:enable_extension "staticsite"
+  Make:match("html$", domprocess)
   Make:htlatex {}
+  Make:htlatex {}
+  Make:match("html$", 
 end
