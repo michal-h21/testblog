@@ -30,5 +30,4 @@ if mode=="publish" then
   Make:match("html$", domprocess)
   Make:htlatex {}
   Make:htlatex {}
-  Make:match("html$", 
 end
