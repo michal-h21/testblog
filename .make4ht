@@ -27,7 +27,7 @@ filter_settings "staticsite" {
 
 if mode=="publish" then
   Make:enable_extension "staticsite"
-  Make:match("html$", domprocess)
+  -- Make:match("html$", domprocess)
   Make:htlatex {}
   Make:htlatex {}
 end
