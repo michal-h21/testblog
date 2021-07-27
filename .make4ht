@@ -16,9 +16,9 @@ filter_settings "staticsite" {
   site_root = outdir,
   header = {
      layout="post",
-     date = function(parameters)
-       return os.date("!%Y-%m-%d %T", parameters.time)
-     end
+    --  date = function(parameters)
+    --    return os.date("!%Y-%m-%d %T", parameters.time)
+    --  end
   },
   map = {
     [".css$"] =  "../../docs/css/"
