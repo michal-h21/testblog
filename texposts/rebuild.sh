@@ -6,6 +6,8 @@ else
 SITEREBUILD=siterebuild
 fi
 
+export TEXINPUTS=.:/root/texmf//: 
+
 $SITEREBUILD -l debug
 for i in `$SITEREBUILD -o %dir@%file`
 do
