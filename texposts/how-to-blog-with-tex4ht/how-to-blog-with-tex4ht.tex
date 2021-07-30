@@ -96,13 +96,9 @@ blog/
 .. texposts_root/
 .... first_post/
 ...... first_post.tex
-...... first_post.published
 .... second_post/
 ...... second_post.tex
-...... second_post.published
 .. html_root/
-.... 2021-07-18-first-post.html
-.... 2021-07-19-second-post.html
 .. .make4ht
 \end{verbatim}
 
@@ -116,7 +112,44 @@ configured to do that using the \texttt{.make4ht} configuration file. This file 
 of shared configuration to \makeht, like in this case, where we want to specify to copy all generated
 files to the \verb|html_root| directory.
 
+The basic format of the \texttt{.make4ht} file necessary for the \texttt{staticsite} extension can look like this:
+
+\begin{verbatim}
+
+filter_settings "staticsite" {
+  site_root =  "../../html_root",
+  header = {
+     layout="post",
+  },
+}
+
+if mode=="publish" then
+  Make:enable_extension "staticsite"
+  Make:htlatex {}
+  Make:htlatex {}
+end
+\end{verbatim}
 
 
+The \verb|filter_settings| function passes table with settings for the extension. The \verb|site_root| field specifies path
+to the generated files directory. It can be specified in the relative form, as in the example. Two \verb|..| are necessary,
+as the output directory is placed two levels up in the directory hierarchy.
+
+We also specify the build sequence for the site generation. If we pass the \verb|--mode publish| option to \makeht, the
+\texttt{staticsite} extension will be enabled, and \LaTeX\ will be executed twice. This is important, because the 
+contents of \verb|\title| and \verb|\author| commands are available only in the second \LaTeX\ run. They are then available
+in the YAML header.
+
+You can now execute the following command in the \verb|texposts_root/first_post| directory:
+
+\begin{verbatim}
+make4ht -m publish first_post.tex
+\end{verbatim}
+
+
+This will load the \texttt{staticsite} automatically, thanks to our \texttt{.make4ht} file, so it is not necessary to enable it 
+on the command line. The generated HTML and CSS files will be placed in the \verb|html_root| directory.
+
+In the next post, we will take a look at how to use this setup together with Jekyll to create a simple blog.
 
 \end{document}
