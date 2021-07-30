@@ -79,10 +79,42 @@ title: 'Hello world test'
     
 \end{verbatim}
 
-Although most static site generators expects Markdown, they also accept HTML files in this form. 
+Although most static site generators expects Markdown, they also accept HTML files in this form.
+When \texttt{staticsite} is used for the first time, it creates file with a \texttt{.published}
+extension. It contains timestamp of the moment when it was used for the first time. This 
+timestamp is used for the date part of the generated filename.
 
-- .published file
+\section{Copy the generated files to the static site}
 
+The \texttt{staticsite} extension can copy the generated files to places where the static site
+generator expects files to process.
+
+Let's say, that we have the following directory structure:
+
+\begin{verbatim}
+blog/
+.. texposts_root/
+.... first_post/
+...... first_post.tex
+...... first_post.published
+.... second_post/
+...... second_post.tex
+...... second_post.published
+.. html_root/
+.... 2021-07-18-first-post.html
+.... 2021-07-19-second-post.html
+.. .make4ht
+\end{verbatim}
+
+
+The blog's main directory contains file \texttt{.make4ht}, and two directories: \verb|texposts_root|
+and \verb|html_root|. 
+
+The source \LaTeX\ files are stored in subdirectories of \verb|texposts_root|. We want to copy the
+generated HTML files to \verb|html_root| automatically. The \texttt{staticsite} extension can be 
+configured to do that using the \texttt{.make4ht} configuration file. This file is meant for passing
+of shared configuration to \makeht, like in this case, where we want to specify to copy all generated
+files to the \verb|html_root| directory.
 
 
 
