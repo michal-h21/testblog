@@ -6,10 +6,10 @@ else
 SITEREBUILD=siterebuild
 fi
 
-git clone https://github.com/michal-h21/make4ht
-cd make4ht
-make justinstall
-cd ..
+# git clone https://github.com/michal-h21/make4ht
+# cd make4ht
+# make justinstall
+# cd ..
 
 export TEXINPUTS=.:/root/texmf//: 
 
