@@ -2,23 +2,14 @@ local outdir = "../../docs/_posts"
 
 local domfilter = require "make4ht-domfilter"
 
--- remove the \maketitle environment from the HTML file, title will be inserted in the template
-local domprocess = domfilter{function(dom)
-  local maketitles = dom:query_selector(".maketitle")
-  for _, el in ipairs(maketitles) do
-    print "removing maketitle"
-    el:remove_node()
-  end
-  return dom
-end}
 
 filter_settings "staticsite" {
   site_root = outdir,
   header = {
      layout="post",
-    --  date = function(parameters)
-    --    return os.date("!%Y-%m-%d %T", parameters.time)
-    --  end
+     date = function(parameters)
+       return os.date("!%Y-%m-%d %T", parameters.time)
+     end
   },
   map = {
     [".css$"] =  "../../docs/css/"
