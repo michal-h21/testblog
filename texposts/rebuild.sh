@@ -23,7 +23,6 @@ do
   if test -f Makefile; then
     make
   else
-    cat /root/texmf/scripts/lua/make4ht/make4ht-logging.lua
     TEXINPUTS=.:/root/texmf//: make4ht -m publish -l "$texfile"
   fi
   cd ..
