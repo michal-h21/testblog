@@ -18,11 +18,16 @@ jobs:
      with:
       repository:  michal-h21/siterebuild 
       path: siterebuild
-   - name: Run make4ht 
-     uses: docker://ghcr.io/michal-h21/make4ht-action:latest 
-     env: # we must go to the directory with tex posts and execute siterebuild
-       command: cd texposts &&  ./rebuild.sh
-       # command: "cd texposts && ../siterebuild/siterebuild -l debug && ls -lt blogging-in-latex-2021-edition && ls -lt ../docs/_posts/" 
+   - uses: xu-cheng/texlive-action/full@v1
+     with:
+       run: |
+         cd texposts
+         ../siterebuild/siterebuild -l debug
+   # - name: Run make4ht 
+   #   uses: docker://ghcr.io/michal-h21/make4ht-action:latest 
+   #   env: # we must go to the directory with tex posts and execute siterebuild
+   #     command: cd texposts &&  ./rebuild.sh
+   #     # command: "cd texposts && ../siterebuild/siterebuild -l debug && ls -lt blogging-in-latex-2021-edition && ls -lt ../docs/_posts/" 
    - name: Autocommit generated files
      uses: stefanzweifel/git-auto-commit-action@v4
      with:
