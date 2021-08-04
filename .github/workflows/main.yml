@@ -22,7 +22,7 @@ jobs:
      with:
        run: |
          cd texposts
-         ../siterebuild/siterebuild -l debug
+         ./rebuild.sh
    # - name: Run make4ht 
    #   uses: docker://ghcr.io/michal-h21/make4ht-action:latest 
    #   env: # we must go to the directory with tex posts and execute siterebuild
