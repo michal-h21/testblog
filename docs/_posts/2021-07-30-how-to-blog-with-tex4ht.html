@@ -1,17 +1,18 @@
 ---
-time: 1627683132
+title: 'How to Blog With TeX4ht'
 styles:
 - '2021-07-30-how-to-blog-with-tex4ht.css'
+updated: 1628095240
+layout: 'post'
+time: 1627683132
 meta:
 - charset: 'utf-8'
-- name: 'generator'
-  content: 'TeX4ht (https://tug.org/tex4ht/)'
-- name: 'viewport'
-  content: 'width=device-width,initial-scale=1'
-- name: 'src'
-  content: '2021-07-30-how-to-blog-with-tex4ht.tex'
-title: 'How to Blog With TeX4ht'
-layout: 'post'
+- content: 'TeX4ht (https://tug.org/tex4ht/)'
+  name: 'generator'
+- content: 'width=device-width,initial-scale=1'
+  name: 'viewport'
+- content: '2021-07-30-how-to-blog-with-tex4ht.tex'
+  name: 'src'
 ---
 
 
@@ -19,20 +20,20 @@ layout: 'post'
 for use with Static Site Generators. We will discuss how to configure it to produce
 suitable HTML in this article.
 </p>   
-<h3 class='sectionHead'><span class='titlemark'>1   </span> <a id='x1-10001'></a>Static site extension for make4ht</h3>
+<h3 class='sectionHead' id='static-site-extension-for-makeht'><span class='titlemark'>1   </span> <a id='x1-10001'></a>Static site extension for make4ht</h3>
 <!--  l. 16  --><p class='noindent'>Conversion process used by TeX4ht is quite complex. It needs to compile LaTeX file
-to a DVI file with special instructions inserted by <span class='rm-lmtt-10'>tex4ht.sty </span>package. This DVI file
-is then processed by <span class='rm-lmtt-10'>tex4ht </span>command, that produces HTML or XML files,
-and instructions for the last command, <span class='rm-lmtt-10'>t4ht</span>, which produces CSS files and
-pictures. Traditionally, this process was handled by the <span class='rm-lmtt-10'>htlatex </span>script, but it
-had many weaknesses, so the currently recommended build tool is <span class='rm-lmtt-10'>make4ht</span>.
-You can find some details about <span class='rm-lmtt-10'>htlatex </span>and <span class='rm-lmtt-10'>make4ht</span> differences in the
-<a href='https://www.kodymirus.cz/make4ht/make4ht-doc.html#difference-of-texttt-makeht'><span class='rm-lmtt-10'>make4ht</span> documentation</a>.
-</p><!--  l. 29  --><p class='indent'>   Among features <span class='rm-lmtt-10'>make4ht</span> has, are Lua build files, post-processing filters, and
+to a DVI file with special instructions inserted by <span class='ec-lmtt-10'>tex4ht.sty </span>package. This DVI file
+is then processed by <span class='ec-lmtt-10'>tex4ht </span>command, that produces HTML or XML files,
+and instructions for the last command, <span class='ec-lmtt-10'>t4ht</span>, which produces CSS files and
+pictures. Traditionally, this process was handled by the <span class='ec-lmtt-10'>htlatex </span>script, but it
+had many weaknesses, so the currently recommended build tool is <span class='ec-lmtt-10'>make4ht</span>.
+You can find some details about <span class='ec-lmtt-10'>htlatex </span>and <span class='ec-lmtt-10'>make4ht</span> differences in the
+<a href='https://www.kodymirus.cz/make4ht/make4ht-doc.html#difference-of-texttt-makeht'><span class='ec-lmtt-10'>make4ht</span> documentation</a>.
+</p><!--  l. 29  --><p class='indent'>   Among features <span class='ec-lmtt-10'>make4ht</span> has, are Lua build files, post-processing filters, and
 extension support. Filters can clean-up the generated files, and fix some common
 issues that are hard to fix on the TeX level. They can be required either from the
 Lua build files, or using extensions.
-</p><!--  l. 34  --><p class='indent'>   <span class='rm-lmtt-10'>make4ht</span> provides an extension that aims at support for static site generators. We
+</p><!--  l. 34  --><p class='indent'>   <span class='ec-lmtt-10'>make4ht</span> provides an extension that aims at support for static site generators. We
 can show the usage on a simple example:
                                                                   
 
@@ -60,8 +61,8 @@ generators:
 make4ht -f html5+staticsite filename.tex
 </pre>
 <!--  l. 53  --><p class='nopar'>
-</p><!--  l. 55  --><p class='indent'>   By default, <span class='rm-lmtt-10'>staticsite </span>extension produces file named as <span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>YYYY-MM-DD-&lt;filename&gt;</span></span></span>,
-this example can be named as <span class='rm-lmtt-10'>2021-07-25-filename.html</span>. It is not ordinary HTML
+</p><!--  l. 55  --><p class='indent'>   By default, <span class='ec-lmtt-10'>staticsite </span>extension produces file named as <span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>YYYY-MM-DD-&lt;filename&gt;</span></span></span>,
+this example can be named as <span class='ec-lmtt-10'>2021-07-25-filename.html</span>. It is not ordinary HTML
 file, but it contains YAML header with document metadata:
                                                                   
 
@@ -91,14 +92,14 @@ title: ’Hello world test’
 </pre>
 <!--  l. 80  --><p class='nopar'>
 </p><!--  l. 82  --><p class='indent'>   Although most static site generators expects Markdown, they also accept HTML
-files in this form. When <span class='rm-lmtt-10'>staticsite </span>is used for the first time, it creates file with a
-<span class='rm-lmtt-10'>.published </span>extension. It contains timestamp of the moment when it was used for
+files in this form. When <span class='ec-lmtt-10'>staticsite </span>is used for the first time, it creates file with a
+<span class='ec-lmtt-10'>.published </span>extension. It contains timestamp of the moment when it was used for
 the first time. This timestamp is used for the date part of the generated
 filename.
 </p><!--  l. 87  --><p class='noindent'>
 </p>   
-<h3 class='sectionHead'><span class='titlemark'>2   </span> <a id='x1-20002'></a>Copy the generated files to the static site</h3>
-<!--  l. 89  --><p class='noindent'>The <span class='rm-lmtt-10'>staticsite </span>extension can copy the generated files to places where the static site
+<h3 class='sectionHead' id='copy-the-generated-files-to-the-static-site'><span class='titlemark'>2   </span> <a id='x1-20002'></a>Copy the generated files to the static site</h3>
+<!--  l. 89  --><p class='noindent'>The <span class='ec-lmtt-10'>staticsite </span>extension can copy the generated files to places where the static site
 generator expects files to process.
 </p><!--  l. 92  --><p class='indent'>   Let’s say, that we have the following directory structure:
                                                                   
@@ -116,15 +117,15 @@ blog/
 .. .make4ht
 </pre>
 <!--  l. 103  --><p class='nopar'>
-</p><!--  l. 106  --><p class='indent'>   The blog’s main directory contains file <span class='rm-lmtt-10'>.make4ht</span>, and two directories:
-<span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>texposts_root</span></span></span> and <span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>html_root</span></span></span>.
-</p><!--  l. 109  --><p class='indent'>   The source LaTeX files are stored in subdirectories of <span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>texposts_root</span></span></span>. We want
-to copy the generated HTML files to <span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>html_root</span></span></span> automatically. The <span class='rm-lmtt-10'>staticsite</span>
-extension can be configured to do that using the <span class='rm-lmtt-10'>.make4ht </span>configuration file.
-This file is meant for passing of shared configuration to <span class='rm-lmtt-10'>make4ht</span>, like in this
-case, where we want to specify to copy all generated files to the <span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>html_root</span></span></span>
+</p><!--  l. 106  --><p class='indent'>   The blog’s main directory contains file <span class='ec-lmtt-10'>.make4ht</span>, and two directories:
+<span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>texposts_root</span></span></span> and <span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>html_root</span></span></span>.
+</p><!--  l. 109  --><p class='indent'>   The source LaTeX files are stored in subdirectories of <span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>texposts_root</span></span></span>. We want
+to copy the generated HTML files to <span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>html_root</span></span></span> automatically. The <span class='ec-lmtt-10'>staticsite</span>
+extension can be configured to do that using the <span class='ec-lmtt-10'>.make4ht </span>configuration file.
+This file is meant for passing of shared configuration to <span class='ec-lmtt-10'>make4ht</span>, like in this
+case, where we want to specify to copy all generated files to the <span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>html_root</span></span></span>
 directory.
-</p><!--  l. 115  --><p class='indent'>   The basic format of the <span class='rm-lmtt-10'>.make4ht </span>file necessary for the <span class='rm-lmtt-10'>staticsite </span>extension can
+</p><!--  l. 115  --><p class='indent'>   The basic format of the <span class='ec-lmtt-10'>.make4ht </span>file necessary for the <span class='ec-lmtt-10'>staticsite </span>extension can
 look like this:
                                                                   
 
@@ -146,16 +147,16 @@ if mode=="publish" then
 end
 </pre>
 <!--  l. 131  --><p class='nopar'>
-</p><!--  l. 134  --><p class='indent'>   The <span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>filter_settings</span></span></span> function passes table with settings for the extension. The
-<span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>site_root</span></span></span> field specifies path to the generated files directory. It can be specified in
-the relative form, as in the example. Two <span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>..</span></span></span> are necessary, as the output directory is
+</p><!--  l. 134  --><p class='indent'>   The <span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>filter_settings</span></span></span> function passes table with settings for the extension. The
+<span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>site_root</span></span></span> field specifies path to the generated files directory. It can be specified in
+the relative form, as in the example. Two <span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>..</span></span></span> are necessary, as the output directory is
 placed two levels up in the directory hierarchy.
 </p><!--  l. 138  --><p class='indent'>   We also specify the build sequence for the site generation. If we pass the
-<span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>--mode publish</span></span></span> option to <span class='rm-lmtt-10'>make4ht</span>, the <span class='rm-lmtt-10'>staticsite </span>extension will be enabled, and
-LaTeX will be executed twice. This is important, because the contents of <span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>\title</span></span></span> and
-<span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>\author</span></span></span> commands are available only in the second LaTeX run. They are then
+<span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>--mode publish</span></span></span> option to <span class='ec-lmtt-10'>make4ht</span>, the <span class='ec-lmtt-10'>staticsite </span>extension will be enabled, and
+LaTeX will be executed twice. This is important, because the contents of <span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>\title</span></span></span> and
+<span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>\author</span></span></span> commands are available only in the second LaTeX run. They are then
 available in the YAML header.
-</p><!--  l. 143  --><p class='indent'>   You can now execute the following command in the <span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>texposts_root/first_post</span></span></span>
+</p><!--  l. 143  --><p class='indent'>   You can now execute the following command in the <span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>texposts_root/first_post</span></span></span>
 directory:
                                                                   
 
@@ -165,9 +166,9 @@ directory:
 make4ht -m publish first_post.tex
 </pre>
 <!--  l. 147  --><p class='nopar'>
-</p><!--  l. 150  --><p class='indent'>   This will load the <span class='rm-lmtt-10'>staticsite </span>automatically, thanks to our <span class='rm-lmtt-10'>.make4ht </span>file, so it is
+</p><!--  l. 150  --><p class='indent'>   This will load the <span class='ec-lmtt-10'>staticsite </span>automatically, thanks to our <span class='ec-lmtt-10'>.make4ht </span>file, so it is
 not necessary to enable it on the command line. The generated HTML and CSS files
-will be placed in the <span class='obeylines-h'><span class='verb'><span class='rm-lmtt-10'>html_root</span></span></span> directory.
+will be placed in the <span class='obeylines-h'><span class='verb'><span class='ec-lmtt-10'>html_root</span></span></span> directory.
 </p><!--  l. 153  --><p class='indent'>   In the next post, we will take a look at how to use this setup together with Jekyll
 to create a simple blog.
 </p>   
