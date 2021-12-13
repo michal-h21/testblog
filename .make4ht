@@ -8,6 +8,7 @@ filter_settings "staticsite" {
   header = {
      layout="post",
      date = function(parameters)
+       print("debugging current time", parameters.time, os.date("!%Y-%m-%d %T", parameters.time))
        return os.date("!%Y-%m-%d %T", parameters.time)
      end
   },
