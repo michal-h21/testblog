@@ -18,7 +18,9 @@ compile \LaTeX\ file to a DVI file with special instructions
 inserted by \texttt{tex4ht.sty} package. This DVI file is then 
 processed by \texttt{tex4ht} command, that produces HTML or XML files,
 and instructions for the last command, \texttt{t4ht}, which produces
-CSS files and pictures. Traditionally, this process was handled 
+CSS files and pictures. 
+
+Traditionally, this process was handled 
 by the \texttt{htlatex} script, but it had many weaknesses, so 
 the currently recommended build tool is \makeht. 
 You can find some details about \texttt{htlatex} and \makeht\ 
@@ -26,10 +28,13 @@ differences in the
 \href{https://www.kodymirus.cz/make4ht/make4ht-doc.html#difference-of-texttt-makeht}
 {\makeht\ documentation}.
 
-Among features \makeht\ has, are Lua build files, post-processing filters, and extension support. 
+Among features provided by \makeht\ are Lua build files, post-processing filters, and extensions.
+We can use these features to transform HTML files produced by \TeX4ht to form required by 
+static site generators.
+
 Filters can clean-up the generated files, and fix some common issues that 
-are hard to fix on the \TeX\ level. They can be required either from 
-the Lua build files, or using extensions. 
+are hard to fix on the \TeX\ level. They can be applyed either from 
+Lua build files, or using \makeht\ extensions. 
 
 \makeht\ provides an extension that aims at support for static site generators. We can show the usage
 on a simple example:
