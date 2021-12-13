@@ -23,7 +23,7 @@ do
   if test -f Makefile; then
     make
   else
-    TEXINPUTS=.:/root/texmf//: make4ht -m publish -l "$texfile"
+    TEXINPUTS=.:/root/texmf//: make4ht -a debug -m publish -l "$texfile"
   fi
   cd ..
   # echo pokus $pokus
