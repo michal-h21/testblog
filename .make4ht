@@ -8,6 +8,17 @@ filter_settings "staticsite" {
   header = {
      layout="post",
      date = function(parameters)
+       local time = parameters.time
+       if not time then
+         -- version of make4ht in TL contains a bug, that not everything from
+         -- parameters set by `staticsite` extension are available in the parameters table
+         -- it is possible that this function is executed before params.time is set. 
+         -- we need to copy if from the "header" settings in that case. it will be unnecessary once
+         -- updated make4ht version is released
+         local settings = get_filter_settings "staticsite" or {}
+         local header = settings.header or {}
+         time = header.time
+       end
        print("debugging current time", parameters.time, os.date("!%Y-%m-%d %T", parameters.time))
        return os.date("!%Y-%m-%d %T", parameters.time)
      end
