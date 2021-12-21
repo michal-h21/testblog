@@ -21,4 +21,13 @@ For the correct function, it needs the following instruction in the workflow fil
 
 \href{https://github.com/stefanzweifel/git-auto-commit-action}{git-auto-commit Action}
 
+It is possible to request compilation on the Github server without need to run
+make4ht locally first. You just need to create the .published file and push it to Github.
+
+The file can be created using the following command:
+
+\begin{verbatim}
+$ date +%s > tex_filename.published
+\end{verbatim}
+
 \end{document}
