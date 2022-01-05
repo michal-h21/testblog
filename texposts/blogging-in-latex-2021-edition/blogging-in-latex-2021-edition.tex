@@ -8,13 +8,20 @@
 
 % \begin{markdown*}{hybrid=true}
 
+\tableofcontents
+
 This is first in series of posts about blogging with \LaTeX\ using
 \href{https://tug.org/tex4ht/}{\TeX4ht}. I've set it up as a showcase of
 \TeX4ht features for \href{https://tug.org/tug2021/}{TUG 2021} conference.
-Due to timing constraints, I haven't show it in the end, but I think it 
-can be interesting to some people anyway.
+I didn't show it in the end, because I ran out of the allocated time 
+for the presentation length, and also didn't finish all posts on time. 
+At the present time, the articles are drafts. I will update them over time,
+but my progress, as usual with my writing, can be slow.
 
 \section*{Why would you do such a crazy thing?}
+
+I like to write my documents in \LaTeX, and I want to provide an alternative
+to other markup languages that are more popular. 
 
 
 
@@ -31,7 +38,21 @@ to the repository, and recompile the web site.
 \end{enumerate}
 
 I will tell more on how to set up an automatic
-blog publishing using Github Pages and Github Actions in the following posts.
+blog publishing using Jekyll, Github Pages and Github Actions in the following posts.
 % \end{markdown*}
+
+The code for this blog is available at
+\url{https://github.com/michal-h21/testblog}.
+
+Notable files and directories are:
+
+\begin{itemize}
+  \item \href{https://github.com/michal-h21/testblog/blob/main/.make4ht}{Build file for make4ht.}
+  \item \href{https://github.com/michal-h21/testblog/tree/main/texposts}{\LaTeX\ documents root.}
+  \item \href{https://github.com/michal-h21/testblog/blob/main/texposts/rebuild.sh}{Script which forces rebuild only changed files}.
+    We don't want to compile all \LaTeX\ files on every blog update. 
+  \item \href{https://github.com/michal-h21/testblog/blob/main/.github/workflows/main.yml}{Github Actions workflow file.}
+\end{itemize}
+
 
 \end{document}
