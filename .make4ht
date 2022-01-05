@@ -19,8 +19,8 @@ filter_settings "staticsite" {
          local header = settings.header or {}
          time = header.time
        end
-       print("debugging current time", parameters.time, os.date("!%Y-%m-%d %T", parameters.time))
-       return os.date("!%Y-%m-%d %T", parameters.time)
+       print("debugging current time", time, os.date("!%Y-%m-%d %T", time))
+       return os.date("!%Y-%m-%d %T", time)
      end
   },
   map = {
