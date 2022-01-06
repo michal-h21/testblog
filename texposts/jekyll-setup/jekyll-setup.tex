@@ -12,13 +12,19 @@ in the \href{/testblog/2021/07/30/how-to-blog-with-tex4ht.html}
 setup it together with \href{https://jekyllrb.com/}{Jekyll}
 to create a simple blog.
 
+\tableofcontents
 
-\section{Jekyll configuration}
+\section{Create new Jekyll site}
+
 
 \begin{verbatim}
-$ jekyll new docs
+$ cd html_posts
+$ jekyll new .
 \end{verbatim}
 
+
+
+\section{Configure Jekyll}
 \begin{verbatim}
 show_excerpts: true
 excerpt_separator: "</p>"
@@ -28,6 +34,10 @@ excerpt_separator: "</p>"
 \begin{verbatim}
 docs/_includes/head.html
 \end{verbatim}
+
+\subsection{Insert document stylesheet}
+
+In the \texttt{}
 
 \begin{verbatim}
 <head>
