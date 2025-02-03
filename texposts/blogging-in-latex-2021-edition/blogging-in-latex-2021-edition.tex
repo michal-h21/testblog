@@ -9,51 +9,73 @@
 % \begin{markdown*}{hybrid=true}
 
 
-This is first in series of posts about blogging with \LaTeX\ using
-\href{https://tug.org/tex4ht/}{\TeX4ht}. I've set it up as a showcase of
-\TeX4ht features for \href{https://tug.org/tug2021/}{TUG 2021} conference.
-I didn't show it in the end, because I ran out of the allocated time 
-for the presentation length, and also didn't finish all posts on time. 
-At the present time, the articles are drafts. I will update them over time,
-but my progress, as usual with my writing, can be slow.
+This is the first in a series of posts about blogging with \LaTeX\ using
+\href{https://tug.org/tex4ht/}{\TeX4ht}. I set it up as a showcase of
+\TeX4ht features for the \href{https://tug.org/tug2021/}{TUG 2021} conference.
+However, I didn't present it in the end because I ran out of the allocated time
+for the presentation and didn't finish all the posts on time.
+
+At present, the articles are still drafts. I plan to update them over time,
+but my progress, as usual with my writing, may be slow.
 
 \tableofcontents
 
 \section{Why would you do such a crazy thing?}
 
-I like to write my documents in \LaTeX, and I want to provide an alternative
-to other markup languages. Contrary to some claims, it isn't hard to compile
-\LaTeX\ to HTML, you just need to take some precautions.
+I like writing my documents in \LaTeX, and I want to provide an alternative
+to other markup languages. The nice thing about \LaTeX\ is that it gives you 
+a great flexibility in the way how to write your documents. 
 
+The nice thing about \LaTeX\ is that it gives you great flexibility in how you
+write your documents. You can define your own environments and commands, which
+allows you to structure content more effectively and reduce repetition. This
+feature is especially useful when writing large documents, such as books or
+theses, where consistency is crucial, but it can be useful even for shorter articles. 
+
+
+Moreover, \LaTeX\ provides access to a vast collection of packages that extend
+its capabilities. For example, you can create professional-looking diagrams
+using packages like \texttt{TikZ} or \texttt{PGFPlots}, write complex
+mathematical formulas with \texttt{Amsmath}, or handle bibliographies
+efficiently using \texttt{BibLaTeX}.
+
+\section{Overview of the setup}
+
+Contrary to some claims, compiling \LaTeX\ to HTML
+isn't difficult—you just need to take some precautions. I am the author of 
 
 \section{Overview of the setup}
 
 \begin{enumerate}
 \item Use \href{/testblog/2021/07/30/how-to-blog-with-tex4ht.html}
 {\TeX4ht to produce files suitable for static site generators}.
-\item Use static site generator, like \href{https://jekyllrb.com/}{Jekyll}
-or \href{https://gohugo.io/}{Hugo}
-, to produce a web site.
-\item Use Github Actions to automatically compile \LaTeX\ files pushed
-to the repository, and recompile the web site. 
+\item Use a static site generator, such as \href{https://jekyllrb.com/}{Jekyll}
+or \href{https://gohugo.io/}{Hugo}, to generate a website.
+\item Use GitHub Actions to automatically compile \LaTeX\ files pushed
+to the repository and rebuild the website.
 \end{enumerate}
 
-I will tell more on how to set up an automatic
-blog publishing using Jekyll, Github Pages and Github Actions in the following posts.
-% \end{markdown*}
+In the following posts, I will explain how to set up an automatic
+blog publishing system using Jekyll, GitHub Pages, and GitHub Actions.
 
 The code for this blog is available at
 \url{https://github.com/michal-h21/testblog}.
 
-Notable files and directories are:
+Notable files and directories include:
 
 \begin{itemize}
   \item \href{https://github.com/michal-h21/testblog/blob/main/.make4ht}{Build file for make4ht.}
-  \item \href{https://github.com/michal-h21/testblog/tree/main/texposts}{\LaTeX\ documents root.}
-  \item \href{https://github.com/michal-h21/testblog/blob/main/texposts/rebuild.sh}{Script which forces rebuild only changed files}.
-    We don't want to compile all \LaTeX\ files on every blog update. 
-  \item \href{https://github.com/michal-h21/testblog/blob/main/.github/workflows/main.yml}{Github Actions workflow file.}
+  \item \href{https://github.com/michal-h21/testblog/tree/main/texposts}{Root directory for \LaTeX\ documents.}
+  \item \href{https://github.com/michal-h21/testblog/blob/main/texposts/rebuild.sh}{Script to force rebuild only for changed files},
+    as we don't want to compile all \LaTeX\ files on every blog update.
+  \item \href{https://github.com/michal-h21/testblog/blob/main/.github/workflows/main.yml}{GitHub Actions workflow file.}
 \end{itemize}
+
+By following these steps, you can create a fully automated blogging workflow with \LaTeX\ and \TeX4ht. 
+This approach allows you to focus on writing while the technical aspects of publishing are handled seamlessly. 
+At least i
+In the upcoming posts, I will cover additional details, such as customizing the output, managing dependencies, 
+and troubleshooting common issues. Stay tuned for more insights on making the most of \LaTeX\ for blogging!
 
 
 \end{document}
