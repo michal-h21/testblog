@@ -12,7 +12,7 @@ jobs:
    #   with:
    #     python-version: "2.x"
    - name: restore timestamps
-     uses: chetan/git-restore-mtime-action@release
+     uses: chetan/git-restore-mtime-action@v2
    - name: Checkout siterebuild
      uses: actions/checkout@v2
      with:
