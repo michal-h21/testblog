@@ -14,6 +14,7 @@ fi
 export TEXINPUTS=.:/root/texmf//: 
 
 $SITEREBUILD -l debug
+# we use the custom output format for siterebuild, to be able to easily extract directory and filename in the later steps
 for i in `$SITEREBUILD -o %dir@%file`
 do
   texdir=`echo $i | cut -d@ -f1 -`
