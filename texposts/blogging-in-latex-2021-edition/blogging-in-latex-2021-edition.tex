@@ -1,50 +1,80 @@
 \documentclass{article}
 \usepackage{hyperref}
 % \usepackage{markdown}
-\title{Blogging in LaTeX, 2021 edition}
+\title{Blogging in LaTeX, 2025 edition}
 \author{Michal Hoftich}
 \begin{document}
 \maketitle
 
 % \begin{markdown*}{hybrid=true}
 
+This is the first post in a series about blogging with \LaTeX\ using
+\href{https://tug.org/tex4ht/}{\TeX4ht}. I originally set it up as a showcase
+of \TeX4ht’s features for the \href{https://tug.org/tug2021/}{TUG 2021}
+conference. Unfortunately, I didn’t get to present it in the end—I ran out of
+time during my allocated slot, and I also didn’t manage to finish all the posts
+I had planned by the deadline. Fast forward to February 2025, and I thought,
+why not finally complete this series? Better late than never, right?
 
-This is the first in a series of posts about blogging with \LaTeX\ using
-\href{https://tug.org/tex4ht/}{\TeX4ht}. I set it up as a showcase of
-\TeX4ht features for the \href{https://tug.org/tug2021/}{TUG 2021} conference.
-However, I didn't present it in the end because I ran out of the allocated time
-for the presentation and didn't finish all the posts on time.
-
-At present, the articles are still drafts. I plan to update them over time,
-but my progress, as usual with my writing, may be slow.
 
 \tableofcontents
 
 \section{Why would you do such a crazy thing?}
 
-I like writing my documents in \LaTeX, and I want to provide an alternative
-to other markup languages. The nice thing about \LaTeX\ is that it gives you 
-a great flexibility in the way how to write your documents. 
 
-The nice thing about \LaTeX\ is that it gives you great flexibility in how you
-write your documents. You can define your own environments and commands, which
-allows you to structure content more effectively and reduce repetition. This
-feature is especially useful when writing large documents, such as books or
-theses, where consistency is crucial, but it can be useful even for shorter articles. 
+I really enjoy writing my documents in \LaTeX, and I want to offer a solid
+alternative to other markup languages like Markdown or HTML. The beauty of
+\LaTeX\ lies in its incredible flexibility—it lets you structure your documents
+exactly how you want, without being tied down by the limitations of more rigid
+systems. Whether you're writing a quick report or a full-blown book, \LaTeX\
+gives you the tools to make it look polished and professional.
 
+Of course, \LaTeX\ isn’t for everyone, and that’s totally fine! Some people
+prefer the instant visual feedback you get with WYSIWYG editors like Word or
+Google Docs, and there’s absolutely nothing wrong with that. Others might like
+the simplicity of plain text but find \LaTeX’s syntax too complicated or even a
+bit ugly—and hey, that’s fair too. Markdown and other lightweight markup
+languages are great alternatives, and there’s no shame in using them.
 
-Moreover, \LaTeX\ provides access to a vast collection of packages that extend
-its capabilities. For example, you can create professional-looking diagrams
-using packages like \texttt{TikZ} or \texttt{PGFPlots}, write complex
-mathematical formulas with \texttt{Amsmath}, or handle bibliographies
-efficiently using \texttt{BibLaTeX}.
+Let’s be honest, \LaTeX\ can be pretty complex, and a lot of people won’t even
+scratch the surface of what it can do. And that’s okay—not everyone needs that
+level of control or customization. Personally, though, I’ve never been a fan of
+Word or Markdown. Word feels too restrictive for my taste, and Markdown, while
+simple, just doesn’t give me the power I need. That’s why I’ve turned to
+\LaTeX\ as my go-to tool. It’s my way of creating an alternative for myself and
+others who feel the same way—people who want more flexibility and precision
+without being tied down by the limitations of other tools.
+
+One of the coolest things about \LaTeX\ is how customizable it is. You can
+create your own environments and commands, which is a game-changer when it
+comes to organizing your content. This is super handy for big projects like
+theses or books, where you need everything to be consistent, but it’s also
+great for smaller stuff like articles or essays. Plus, once you’ve set up your
+custom commands, you can reuse them across different documents, saving you a
+ton of time.
+
+Another reason I love \LaTeX\ is the sheer number of packages available. These
+packages let you do pretty much anything you can think of. Need to draw
+diagrams? Check out \texttt{TikZ} or \texttt{PGFPlots}. Writing a math-heavy
+paper? \texttt{Amsmath} has got your back. Managing references?
+\texttt{BibLaTeX} makes it a breeze. The possibilities are endless, and it’s
+one of the reasons \LaTeX\ is so powerful.
+
+Now, some people say that converting \LaTeX\ to HTML is a pain, but honestly,
+it’s not that hard if you know what you’re doing. I’m the author of
+\href{https://tug.org/tex4ht/}{\TeX4ht}, a tool that makes this process a lot
+smoother. It’s a great way to make your content more accessible online without losing the
+precision and beauty of \LaTeX.
 
 \section{Overview of the setup}
 
-Contrary to some claims, compiling \LaTeX\ to HTML
-isn't difficult—you just need to take some precautions. I am the author of 
+In the upcoming posts, we’ll dive into how \TeX4ht works and how to configure
+it to generate HTML files that play nicely with static site generators. After
+that, I’ll share how I used Jekyll to build this series of posts. 
+Finally, we’ll wrap things up by exploring how to use GitHub Actions to
+automatically rebuild your website whenever you update your \LaTeX\ documents.
 
-\section{Overview of the setup}
+Here is an outline of the steps we’ll cover:
 
 \begin{enumerate}
 \item Use \href{/testblog/2021/07/30/how-to-blog-with-tex4ht.html}
@@ -55,10 +85,8 @@ or \href{https://gohugo.io/}{Hugo}, to generate a website.
 to the repository and rebuild the website.
 \end{enumerate}
 
-In the following posts, I will explain how to set up an automatic
-blog publishing system using Jekyll, GitHub Pages, and GitHub Actions.
 
-The code for this blog is available at
+If you’re curious to check out the source code for this blog, you can find it at this link:
 \url{https://github.com/michal-h21/testblog}.
 
 Notable files and directories include:
@@ -70,12 +98,6 @@ Notable files and directories include:
     as we don't want to compile all \LaTeX\ files on every blog update.
   \item \href{https://github.com/michal-h21/testblog/blob/main/.github/workflows/main.yml}{GitHub Actions workflow file.}
 \end{itemize}
-
-By following these steps, you can create a fully automated blogging workflow with \LaTeX\ and \TeX4ht. 
-This approach allows you to focus on writing while the technical aspects of publishing are handled seamlessly. 
-At least i
-In the upcoming posts, I will cover additional details, such as customizing the output, managing dependencies, 
-and troubleshooting common issues. Stay tuned for more insights on making the most of \LaTeX\ for blogging!
 
 
 \end{document}
