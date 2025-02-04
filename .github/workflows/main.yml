@@ -18,7 +18,7 @@ jobs:
      with:
       repository:  michal-h21/siterebuild 
       path: siterebuild
-   - uses: xu-cheng/texlive-action/full@v2
+   - uses: xu-cheng/texlive-action/full@v1
      with:
        run: |
          cd texposts
