@@ -17,8 +17,8 @@ jobs:
 
     - name: Restore timestamps
       uses: chetan/git-restore-mtime-action@v2
-      with:
-        path: main
+      # with:
+        # working-directory: main
 
     # 2. Checkout build branch with previously generated HTML
     - name: Checkout build branch
