@@ -1,81 +1,35 @@
-name: CI
-
-on: [push]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    # 1. Checkout the main branch with LaTeX sources and scripts
-    - name: Checkout main
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        ref: main
-        path: main
-
-    # 2. Restore original file modification times from Git history
-    - name: Restore timestamps
-      uses: chetan/git-restore-mtime-action@v2
-      with: 
-        working-directory: main
-
-    # 3. Checkout the build branch or create it if it doesn't exist
-    - name: Checkout or create build branch
-      run: |
-        git clone --branch=main https://github.com/${{ github.repository }} build
-        cd build
-        if git fetch origin build && git checkout build; then
-          echo "Checked out existing build branch"
-        else
-          echo "Creating build branch"
-          git checkout -b build
-        fi
-
-    # 4. Copy previously generated HTML posts from the build branch to the main working directory
-    - name: Import old HTML posts from build branch
-      run: |
-        mkdir -p main/docs/_posts
-        cp -r build/docs/_posts/* main/docs/_posts/ || true
-
-    # 5. Checkout the siterebuild repository (helper scripts)
-    - name: Checkout siterebuild
-      uses: actions/checkout@v4
-      with:
-        repository: michal-h21/siterebuild
-        path: siterebuild
-
-    # 6. Run the rebuild script to compile updated LaTeX files
-    - name: Rebuild changed LaTeX sources
-      uses: xu-cheng/texlive-action/full@v1
-      with:
-        run: |
-          cd main/texposts
-          ./rebuild.sh
-
-    # 7. Copy newly generated HTML posts to the build branch
-    - name: Copy new HTML posts into build branch
-      run: |
-        rm -rf build/docs/_posts
-        mkdir -p build/docs/_posts
-        cp -r main/docs/_posts/* build/docs/_posts/
-
-    # 8. Commit and push updated HTML files back to the build branch
-    - name: Commit updated HTML to build branch
-      run: |
-        cd build
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-        git add docs/_posts
-        git commit -m "Update generated HTML blog posts" || echo "No changes to commit"
-        git push origin build
-
-    # 9. Deploy the site from the build branch to GitHub Pages
-    - name: Deploy site to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: build/docs
-        publish_branch: gh-pages
-        enable_jekyll: true
+name: CI 
+on: [push] 
+jobs: 
+  build: 
+   runs-on: ubuntu-latest 
+   steps: 
+   - uses: actions/checkout@v4 
+     with:
+       fetch-depth: 0
+   # - name: Setup python # it seems that "restore timestamps" needs Python 2
+   #   uses: actions/setup-python@v2
+   #   with:
+   #     python-version: "2.x"
+   - name: restore timestamps
+     uses: chetan/git-restore-mtime-action@v2
+   - name: Checkout siterebuild
+     uses: actions/checkout@v4
+     with:
+      repository:  michal-h21/siterebuild 
+      path: siterebuild
+   - uses: xu-cheng/texlive-action/full@v1
+     with:
+       run: |
+         cd texposts
+         ./rebuild.sh
+   # - name: Run make4ht 
+   #   uses: docker://ghcr.io/michal-h21/make4ht-action:latest 
+   #   env: # we must go to the directory with tex posts and execute siterebuild
+   #     command: cd texposts &&  ./rebuild.sh
+   #     # command: "cd texposts && ../siterebuild/siterebuild -l debug && ls -lt blogging-in-latex-2021-edition && ls -lt ../docs/_posts/" 
+   - name: Autocommit generated files
+     uses: stefanzweifel/git-auto-commit-action@v4
+     with:
+       commit_message: Save generated files
+       file_pattern: docs/*
