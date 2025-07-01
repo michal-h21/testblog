@@ -9,6 +9,10 @@
 This article describes how to configure GitHub Actions to automatically compile \LaTeX\ sources
 for a static blog built with tools like \makeht{} and Jekyll. It covers file tracking,
 automatic build triggering, and committing generated files back to the repository.
+You can find the YAML configuration in the
+\href{https://github.com/michal-h21/testblog/blob/main/.github/workflows/main.yml}{.github/workflows/main.yml}
+file.
+
 
 \tableofcontents
 
@@ -16,7 +20,7 @@ automatic build triggering, and committing generated files back to the repositor
 
 Git does not preserve file modification times when cloning or checking out repositories.  
 However, tools like \makeht{} or other build systems may rely on these timestamps to detect changed files.  
-To compile only updated \LaTeX\ sources, we need to **restore original modification times** 
+To compile only updated \LaTeX\ sources, we need to \textit{restore original modification times}
 from the commit history.
 
 \subsection{Restoring Timestamps with GitHub Actions}
@@ -38,13 +42,16 @@ This fetches the complete Git history so the action can determine modification t
 
 \section{Compiling \LaTeX\ on GitHub}
 
-It is possible to run the full \LaTeX{} to HTML compilation process **directly on GitHub**, 
+It is possible to run the full \LaTeX{} to HTML compilation process directly on GitHub, 
 without needing to generate files locally.
 
 \subsection{Using a Marker File to Trigger Compilation}
 
 To control whether a file should be rebuilt, we use a marker file named after the source file 
 with the extension \texttt{.published}. It stores the timestamp of the last successful publication.
+
+It is created automatically if you use the \texttt{staticsite} extension, but you can also create it manually,
+if you want to compile your file only on Github, without local testing.
 
 For example, for a file named \texttt{tex\_filename.tex}, create a corresponding marker file:
 
@@ -56,14 +63,16 @@ This command stores the current UNIX timestamp in the marker file. The build scr
 on the GitHub server can then compare this value with the file's modification time 
 to decide whether recompilation is needed.
 
+Whether the \texttt{.published} file was created manually or by the \texttt{staticsite}
+extension, make sure to commit it to the repository—GitHub Actions needs it to
+be present during the build.
+
+
 \section{Committing Generated Files Back to GitHub}
 
-If your build process generates HTML or other output files that should be committed 
-back to the repository (e.g., for GitHub Pages), you can automate the commit using:
-
-\href{https://github.com/stefanzweifel/git-auto-commit-action}{\texttt{git-auto-commit-action}}
-
-It allows you to commit changes created during the GitHub Action run.
+Every build generates HTML and CSS files, and these are automatically committed
+to the repository for publishing (e.g., with GitHub Pages), using the
+\href{https://github.com/stefanzweifel/git-auto-commit-action}{\texttt{git-auto-commit-action}}.
 
 A typical workflow step might look like this:
 
@@ -77,10 +86,46 @@ A typical workflow step might look like this:
 This commits and pushes the generated files to the \texttt{main} branch automatically, 
 making them available to GitHub Pages or other deployment mechanisms.
 
-\section{Conclusion}
+After each build, it's important to pull the latest changes from GitHub into
+your local repository. These changes include newly generated or updated files
+(e.g., in \verb|docs/_posts/|) that were committed automatically by the GitHub Actions
+workflow.
 
-With a combination of restored modification times, marker files, and automated commits, 
-you can create a seamless workflow for compiling and deploying your \LaTeX{}-authored blog 
-entirely on GitHub. This reduces the need for manual steps and makes continuous publishing possible.
+If you also generate the same output files locally, there is a risk of merge
+conflicts, since your local versions may differ from the ones produced on the
+server (even if logically equivalent).
+
+\section{Configure Github Pages}
+
+To configure GitHub Pages to serve content from the \texttt{docs} directory in the \texttt{main} branch, follow these steps:
+
+\begin{enumerate}
+  \item Open your repository on GitHub.
+  \item Navigate to the \textbf{Settings} tab.
+  \item In the left-hand menu, select \textbf{Pages}.
+  \item Under the \textbf{Source} section:
+    \begin{itemize}
+      \item Set the branch to \texttt{main}.
+      \item Set the folder to \texttt{/docs}.
+    \end{itemize}
+  \item Click \textbf{Save}.
+\end{enumerate}
+
+
+\subsection*{Accessing your blog}
+
+Once GitHub Pages is configured, your blog will be available at:
+
+\begin{quote}
+\texttt{https://\textit{username}.github.io/\textit{repository-name}/}
+\end{quote}
+
+For example, if your GitHub username is \texttt{janedoe} and your repository is named \texttt{tex-blog}, the blog will be published at:
+
+\begin{quote}
+\texttt{https://janedoe.github.io/tex-blog/}
+\end{quote}
+
+
 
 \end{document}
