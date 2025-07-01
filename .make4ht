@@ -3,15 +3,6 @@ local outdir = "../../docs/_posts"
 local mkutils = require "mkutils"
 local domfilter = require "make4ht-domfilter"
 
--- make a new function that will save the published time of the post
-Make:add("publish", function(par)
-  local published_name = par.tex_file .. ".published"
-  if mkutils.file_exists(published_name) then return 0 end
-  local f = io.open(published_name, "w")
-  f:write(os.time())
-  f:close()
-end)
-
 filter_settings "staticsite" {
   site_root = outdir,
   header = {
@@ -39,7 +30,6 @@ filter_settings "staticsite" {
 
 if mode=="publish" then
   -- this will create the "<jobname>.pubslished file, if it doesn't exist
-  Make:publish()
   Make:enable_extension "staticsite"
   -- Make:match("html$", domprocess)
   Make:htlatex {}
