@@ -160,6 +160,32 @@ on the command line. The generated HTML and CSS files will be placed in the \ver
 
 We will take a look at how to use this setup together with Jekyll to create a simple blog in the next post.
 
+The \href{https://github.com/michal-h21/testblog/blob/main/.make4ht}{.make4ht}
+file provided in this blog repository allso adds a new function that will write 
+a \verb|<input>.pubslished| file. This file is used by by the \texttt{staticsite} extension to find the original 
+date of the publication of a post. You should add the \texttt{pubslished} file
+to your source repository, so the correct date of the publication is used in
+next updates of the site.
+
+
+
+\section{Automatic compilation of the changed \LaTeX\ files}
+
+Instead of compiling the documents manually after each change, 
+you can automate the build process using the 
+\href{https://github.com/michal-h21/siterebuild}{siterebuild} script.
+
+This tool finds all \TeX\ files in your document directory tree for changes.
+It lists only the changed files. This is especially important 
+if your blog grows up, as it would be wastefull to compile all source files 
+on each update.
+
+I've provided a shell script named \href{https://github.com/michal-h21/testblog/blob/main/texposts/rebuild.sh}{rebuild.sh},
+included in the \TeX\ files root directory. It uses \texttt{siterebuild} and compiles the changed \TeX\ files automatically. 
+
+If you want to change options for \texttt{make4ht} used for the compilation, you can edit this file. If you want to 
+change options only for one file, you can create a Makefile in the directory of that file and put commands 
+necessary for the compilation in that Makefile.
 
 
 \end{document}
