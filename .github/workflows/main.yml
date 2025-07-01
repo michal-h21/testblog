@@ -24,10 +24,12 @@ jobs:
          cd texposts
          ./rebuild.sh
       name: Publikování webových stránek
-   - uses: peaceiris/actions-gh-pages@v3
-     with:
-       github_token: ${{ secrets.GITHUB_TOKEN }}
-       publish_dir: ./docs
+    - name: Publish the web pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
+        publish_branch: gh-pages
 
    # - name: Run make4ht 
    #   uses: docker://ghcr.io/michal-h21/make4ht-action:latest 
