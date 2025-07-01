@@ -24,7 +24,7 @@ jobs:
     # 3. Checkout the build branch or create it if it doesn't exist
     - name: Checkout or create build branch
       run: |
-        git clone --depth=0 --branch=main https://github.com/${{ github.repository }} build
+        git clone --branch=main https://github.com/${{ github.repository }} build
         cd build
         if git fetch origin build && git checkout build; then
           echo "Checked out existing build branch"
