@@ -1,0 +1,159 @@
+---
+date: '2025-07-01 16:04:49'
+layout: 'post'
+meta:
+- charset: 'utf-8'
+- content: 'TeX4ht (https://tug.org/tex4ht/)'
+  name: 'generator'
+- content: 'width=device-width,initial-scale=1'
+  name: 'viewport'
+- content: '2025-07-01-setup-blog-with-github-actions.tex'
+  name: 'src'
+styles:
+- '2025-07-01-setup-blog-with-github-actions.css'
+time: 1751385889
+title: 'Setup Blog with GitHub Actions'
+---
+
+
+<!--   l. 9   --><p class='indent'>   This article describes how to configure GitHub Actions to automatically compile
+LaTeX sources for a static blog built with tools like <span class='ec-lmtt-10'>make4ht </span>and Jekyll. It covers file
+tracking, automatic build triggering, and committing generated files back to the
+repository. You can find the YAML configuration in the <a href='https://github.com/michal-h21/testblog/blob/main/.github/workflows/main.yml'>.github/workflows/main.yml</a>
+file.
+
+</p>   
+<h3 class='likesectionHead' id='contents'><a id='x1-1000'></a>Contents</h3>
+<div class='tableofcontents'>   
+<span class='sectionToc'>1 <a href='#problem-git-and-modification-times' id='QQ2-1-2'>Problem: Git and Modification Times</a></span>
+<br />   <span class='subsectionToc'>1.1 <a href='#restoring-timestamps-with-github-actions' id='QQ2-1-3'>Restoring Timestamps with GitHub Actions</a></span>
+<br />   <span class='sectionToc'>2 <a href='#compiling-latex-on-github' id='QQ2-1-4'>Compiling LaTeX on GitHub</a></span>
+<br />   <span class='subsectionToc'>2.1 <a href='#using-a-marker-file-to-trigger-compilation' id='QQ2-1-5'>Using a Marker File to Trigger Compilation</a></span>
+<br />   <span class='sectionToc'>3 <a href='#committing-generated-files-back-to-github' id='QQ2-1-6'>Committing Generated Files Back to GitHub</a></span>
+<br />   <span class='sectionToc'>4 <a href='#configure-github-pages' id='QQ2-1-7'>Configure Github Pages</a></span>
+</div>   
+
+<h3 class='sectionHead' id='problem-git-and-modification-times'><span class='titlemark'>1   </span> <a id='x1-20001'></a>Problem: Git and Modification Times</h3>
+<!--   l. 21   --><p class='noindent'>Git does not preserve file modification times when cloning or checking out
+repositories. However, tools like <span class='ec-lmtt-10'>make4ht </span>or other build systems may rely on these
+timestamps to detect changed files. To compile only updated LaTeX sources, we need
+to <span class='ec-lmri-10'>restore original modification times </span>from the commit history.
+
+                                                                  
+
+                                                                  
+</p>   
+<h4 class='subsectionHead' id='restoring-timestamps-with-github-actions'><span class='titlemark'>1.1   </span> <a id='x1-30001.1'></a>Restoring Timestamps with GitHub Actions</h4>
+<!--   l. 28   --><p class='noindent'>The <a href='https://github.com/chetan/git-restore-mtime-action'><span class='ec-lmtt-10'>git-restore-mtime-action</span></a> can be used to recover accurate modification times
+for files in a GitHub workflow.
+</p><!--   l. 32   --><p class='indent'>   To function correctly, it requires the full commit history, not just the latest
+commit. You must ensure the following step is included in your GitHub Actions
+workflow:
+                                                                  
+
+                                                                  
+</p>   
+<pre class='verbatim' id='verbatim-1'>
+- uses: actions/checkout@v2
+  with:
+    fetch-depth: 0
+</pre>
+<!--   l. 39   --><p class='nopar'>
+</p><!--   l. 41   --><p class='indent'>   This fetches the complete Git history so the action can determine modification
+times correctly.
+
+</p>   
+<h3 class='sectionHead' id='compiling-latex-on-github'><span class='titlemark'>2   </span> <a id='x1-40002'></a>Compiling LaTeX on GitHub</h3>
+<!--   l. 45   --><p class='noindent'>It is possible to run the full LaTeX to HTML compilation process directly on
+GitHub, without needing to generate files locally.
+
+</p>   
+<h4 class='subsectionHead' id='using-a-marker-file-to-trigger-compilation'><span class='titlemark'>2.1   </span> <a id='x1-50002.1'></a>Using a Marker File to Trigger Compilation</h4>
+<!--   l. 50   --><p class='noindent'>To control whether a file should be rebuilt, we use a marker file named after the
+source file with the extension <span class='ec-lmtt-10'>.published</span>. It stores the timestamp of the last
+successful publication.
+</p><!--   l. 53   --><p class='indent'>   It is created automatically if you use the <span class='ec-lmtt-10'>staticsite </span>extension, but you can also
+create it manually, if you want to compile your file only on Github, without local
+testing.
+</p><!--   l. 56   --><p class='indent'>   For example, for a file named <span class='ec-lmtt-10'>tex_filename.tex</span>, create a corresponding marker
+file:
+                                                                  
+
+                                                                  
+</p>   
+<pre class='verbatim' id='verbatim-2'>
+$ date +%s &gt; tex_filename.published
+</pre>
+<!--   l. 60   --><p class='nopar'>
+</p><!--   l. 62   --><p class='indent'>   This command stores the current UNIX timestamp in the marker file. The build
+script on the GitHub server can then compare this value with the file’s modification
+time to decide whether recompilation is needed.
+</p><!--   l. 66   --><p class='indent'>   Whether the <span class='ec-lmtt-10'>.published </span>file was created manually or by the <span class='ec-lmtt-10'>staticsite</span>
+extension, make sure to commit it to the repository—GitHub Actions needs it to be
+present during the build.
+
+</p>   
+<h3 class='sectionHead' id='committing-generated-files-back-to-github'><span class='titlemark'>3   </span> <a id='x1-60003'></a>Committing Generated Files Back to GitHub</h3>
+<!--   l. 73   --><p class='noindent'>Every build generates HTML and CSS files, and these are automatically
+committed to the repository for publishing (e.g., with GitHub Pages), using the
+<a href='https://github.com/stefanzweifel/git-auto-commit-action'><span class='ec-lmtt-10'>git-auto-commit-action</span></a>.
+</p><!--   l. 77   --><p class='indent'>   A typical workflow step might look like this:
+                                                                  
+
+                                                                  
+</p>   
+<pre class='verbatim' id='verbatim-3'>
+- uses: stefanzweifel/git-auto-commit-action@v5
+  with:
+    commit_message: "Update generated HTML files"
+    branch: main
+</pre>
+<!--   l. 84   --><p class='nopar'>
+</p><!--   l. 86   --><p class='indent'>   This commits and pushes the generated files to the <span class='ec-lmtt-10'>main </span>branch automatically,
+making them available to GitHub Pages or other deployment mechanisms.
+</p><!--   l. 89   --><p class='indent'>   After each build, it’s important to pull the latest changes from GitHub into your
+local repository. These changes include newly generated or updated files (e.g., in
+<span class='obeylines-h'><code class='verb'>docs/_posts/</code></span>) that were committed automatically by the GitHub Actions
+workflow.
+</p><!--   l. 94   --><p class='indent'>   If you also generate the same output files locally, there is a risk of merge conflicts,
+since your local versions may differ from the ones produced on the server (even if
+logically equivalent).
+
+</p>   
+<h3 class='sectionHead' id='configure-github-pages'><span class='titlemark'>4   </span> <a id='x1-70004'></a>Configure Github Pages</h3>
+<!--   l. 100   --><p class='noindent'>To configure GitHub Pages to serve content from the <span class='ec-lmtt-10'>docs </span>directory in the <span class='ec-lmtt-10'>main</span>
+branch, follow these steps:
+</p><!--   l. 102   --><p class='indent'>     
+</p>
+<ol class='enumerate1'>
+<li class='enumerate' id='x1-7002x1'>Open your repository on GitHub.
+</li>
+<li class='enumerate' id='x1-7004x2'>Navigate to the <span class='ec-lmbx-10'>Settings </span>tab.
+</li>
+<li class='enumerate' id='x1-7006x3'>In the left-hand menu, select <span class='ec-lmbx-10'>Pages</span>.
+</li>
+                                                                  
+
+                                                                  
+<li class='enumerate' id='x1-7008x4'>     
+<!--   l. 106   --><p class='noindent'>Under the <span class='ec-lmbx-10'>Source </span>section: </p>
+<ul class='itemize1'>         
+<li class='itemize'>Set the branch to <span class='ec-lmtt-10'>main</span>.
+</li>
+<li class='itemize'>Set the folder to <span class='ec-lmtt-10'>/docs</span>.</li></ul>
+</li>
+<li class='enumerate' id='x1-7010x5'>Click <span class='ec-lmbx-10'>Save</span>.</li></ol>
+   
+<h4 class='likesubsectionHead' id='accessing-your-blog'><a id='x1-8000'></a>Accessing your blog</h4>
+<!--   l. 117   --><p class='noindent'>Once GitHub Pages is configured, your blog will be available at:
+</p><!--   l. 119   --><p class='indent'>     
+</p>
+<blockquote class='quote'>     
+<!--   l. 120   --><p class='noindent'><span class='ec-lmtt-10'>https://</span><span class='ec-lmtti-10'>username</span><span class='ec-lmtt-10'>.github.io/</span><span class='ec-lmtti-10'>repository-name</span><span class='ec-lmtt-10'>/</span></p></blockquote>
+<!--   l. 123   --><p class='indent'>   For example, if your GitHub username is <span class='ec-lmtt-10'>janedoe </span>and your repository is named
+<span class='ec-lmtt-10'>tex-blog</span>, the blog will be published at:
+</p><!--   l. 125   --><p class='indent'>     
+</p>
+<blockquote class='quote'>     
+<!--   l. 126   --><p class='noindent'><span class='ec-lmtt-10'>https://janedoe.github.io/tex-blog/</span></p></blockquote>
+ 
