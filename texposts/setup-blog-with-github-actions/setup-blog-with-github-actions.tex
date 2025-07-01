@@ -1,17 +1,32 @@
 \documentclass{article}
 \usepackage{hyperref}
-\title{Setup blog with Github Actions}
+\title{Setup Blog with GitHub Actions}
 \author{Michal Hoftich}
+\def\makeht{\texttt{make4ht}}
 \begin{document}
 \maketitle
 
-Git doesn't keep modification time in the repository. As we want to compile only modified
-\LaTeX\ files, we need to restore the modification times. 
-Thankfully, this is possible thanks to 
-\href{https://github.com/chetan/git-restore-mtime-action}{git-restore-mtime action}
-which can restore modification times from the file commit times.
+This article describes how to configure GitHub Actions to automatically compile \LaTeX\ sources
+for a static blog built with tools like \makeht{} and Jekyll. It covers file tracking,
+automatic build triggering, and committing generated files back to the repository.
 
-For the correct function, it needs the following instruction in the workflow file:
+\tableofcontents
+
+\section{Problem: Git and Modification Times}
+
+Git does not preserve file modification times when cloning or checking out repositories.  
+However, tools like \makeht{} or other build systems may rely on these timestamps to detect changed files.  
+To compile only updated \LaTeX\ sources, we need to **restore original modification times** 
+from the commit history.
+
+\subsection{Restoring Timestamps with GitHub Actions}
+
+The 
+\href{https://github.com/chetan/git-restore-mtime-action}{\texttt{git-restore-mtime-action}} 
+can be used to recover accurate modification times for files in a GitHub workflow.
+
+To function correctly, it requires the full commit history, not just the latest commit.
+You must ensure the following step is included in your GitHub Actions workflow:
 
 \begin{verbatim}
 - uses: actions/checkout@v2
@@ -19,15 +34,53 @@ For the correct function, it needs the following instruction in the workflow fil
     fetch-depth: 0
 \end{verbatim}
 
-\href{https://github.com/stefanzweifel/git-auto-commit-action}{git-auto-commit Action}
+This fetches the complete Git history so the action can determine modification times correctly.
 
-It is possible to request compilation on the Github server without need to run
-make4ht locally first. You just need to create the .published file and push it to Github.
+\section{Compiling \LaTeX\ on GitHub}
 
-The file can be created using the following command:
+It is possible to run the full \LaTeX{} to HTML compilation process **directly on GitHub**, 
+without needing to generate files locally.
+
+\subsection{Using a Marker File to Trigger Compilation}
+
+To control whether a file should be rebuilt, we use a marker file named after the source file 
+with the extension \texttt{.published}. It stores the timestamp of the last successful publication.
+
+For example, for a file named \texttt{tex\_filename.tex}, create a corresponding marker file:
 
 \begin{verbatim}
 $ date +%s > tex_filename.published
 \end{verbatim}
+
+This command stores the current UNIX timestamp in the marker file. The build script 
+on the GitHub server can then compare this value with the file's modification time 
+to decide whether recompilation is needed.
+
+\section{Committing Generated Files Back to GitHub}
+
+If your build process generates HTML or other output files that should be committed 
+back to the repository (e.g., for GitHub Pages), you can automate the commit using:
+
+\href{https://github.com/stefanzweifel/git-auto-commit-action}{\texttt{git-auto-commit-action}}
+
+It allows you to commit changes created during the GitHub Action run.
+
+A typical workflow step might look like this:
+
+\begin{verbatim}
+- uses: stefanzweifel/git-auto-commit-action@v5
+  with:
+    commit_message: "Update generated HTML files"
+    branch: main
+\end{verbatim}
+
+This commits and pushes the generated files to the \texttt{main} branch automatically, 
+making them available to GitHub Pages or other deployment mechanisms.
+
+\section{Conclusion}
+
+With a combination of restored modification times, marker files, and automated commits, 
+you can create a seamless workflow for compiling and deploying your \LaTeX{}-authored blog 
+entirely on GitHub. This reduces the need for manual steps and makes continuous publishing possible.
 
 \end{document}
