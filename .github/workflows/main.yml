@@ -20,7 +20,7 @@ jobs:
        git config user.email "github-actions@github.com"
 
        # Přidat main jako remote pro merge
-       git remote add main-repo ../..
+       git remote add source-repo "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
        git fetch main-repo main
         
        # Merge změn z main do gh-pages (převzít změny z main)
@@ -28,7 +28,6 @@ jobs:
 
        # Nebo pro konzervativnější přístup:
        # git merge main-repo/main --no-commit --allow-unrelated-histories
-   
    # - name: Setup python # it seems that "restore timestamps" needs Python 2
    #   uses: actions/setup-python@v2
    #   with:
