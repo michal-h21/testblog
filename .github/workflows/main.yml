@@ -14,20 +14,20 @@ jobs:
        path: output
        fetch-depth: 0
    - name: Sync output with main branch
-      run: |
-        cd output
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
+     run: |
+       cd output
+       git config user.name "github-actions"
+       git config user.email "github-actions@github.com"
+
+       # Přidat main jako remote pro merge
+       git remote add main-repo ../..
+       git fetch main-repo main
         
-        # Přidat main jako remote pro merge
-        git remote add main-repo ../..
-        git fetch main-repo main
-        
-        # Merge změn z main do gh-pages (převzít změny z main)
-        git merge main-repo/main --strategy-option=ours --allow-unrelated-histories --no-edit
-        
-        # Nebo pro konzervativnější přístup:
-        # git merge main-repo/main --no-commit --allow-unrelated-histories
+       # Merge změn z main do gh-pages (převzít změny z main)
+       git merge main-repo/main --strategy-option=ours --allow-unrelated-histories --no-edit
+
+       # Nebo pro konzervativnější přístup:
+       # git merge main-repo/main --no-commit --allow-unrelated-histories
    
    # - name: Setup python # it seems that "restore timestamps" needs Python 2
    #   uses: actions/setup-python@v2
