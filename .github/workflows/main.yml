@@ -20,7 +20,7 @@ jobs:
        git config user.email "github-actions@github.com"
 
        # Přidat main jako remote pro merge
-       git remote add source-repo "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
+       git remote add main-repo "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
        git fetch main-repo main
         
        # Merge změn z main do gh-pages (převzít změny z main)
