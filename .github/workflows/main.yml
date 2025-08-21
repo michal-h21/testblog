@@ -42,7 +42,14 @@ jobs:
        run: |
          cd texposts
          ./rebuild.sh
-   
+
+   - name: Pull latest changes from origin
+     run: |
+       git pull origin html --rebase  # nebo --no-rebase podle preference
+       # nebo pro force sync:
+       # git fetch origin html
+       # git reset --hard origin/html 
+       
    - name: Autocommit generated files
      uses: stefanzweifel/git-auto-commit-action@v4
      with:
