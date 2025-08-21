@@ -13,7 +13,7 @@ styles:
 - '2021-07-30-how-to-blog-with-tex4ht.css'
 time: 1627683132
 title: 'How to Blog With TeX4ht'
-updated: 1751382824
+updated: 1755808418
 ---
 
 
@@ -27,6 +27,7 @@ suitable HTML in this article.
 <span class='sectionToc'>1 <a href='#static-site-extension-for-makeht' id='QQ2-1-2'>Static site extension for make4ht</a></span>
 <br />   <span class='sectionToc'>2 <a href='#copy-the-generated-files-to-the-static-site' id='QQ2-1-3'>Copy the generated files to the static site</a></span>
 <br />   <span class='sectionToc'>3 <a href='#automatic-compilation-of-the-changed-latex-files' id='QQ2-1-4'>Automatic compilation of the changed LaTeX files</a></span>
+<br />   <span class='subsectionToc'>3.1 <a href='#rebuildsh-script-functionality' id='QQ2-1-5'><span class='ec-lmtt-10'>rebuild.sh </span>Script Functionality</a></span>
 </div>   
 
 <h3 class='sectionHead' id='static-site-extension-for-makeht'><span class='titlemark'>1   </span> <a id='x1-20001'></a>Static site extension for make4ht</h3>
@@ -199,12 +200,26 @@ the build process using the <a href='https://github.com/michal-h21/siterebuild'>
 </p><!--   l. 178   --><p class='indent'>   This tool finds all TeX files in your document directory tree for changes. It lists
 only the changed files. This is especially important if your blog grows up, as it would
 be wastefull to compile all source files on each update.
-</p><!--   l. 183   --><p class='indent'>   I’ve provided a shell script named <a href='https://github.com/michal-h21/testblog/blob/main/texposts/rebuild.sh'>rebuild.sh</a>, included in the TeX files
-root directory. It uses <span class='ec-lmtt-10'>siterebuild </span>and compiles the changed TeX files
-automatically.
-</p><!--   l. 186   --><p class='indent'>   If you want to change options for <span class='ec-lmtt-10'>make4ht </span>used for the compilation, you can edit
-this file. If you want to change options only for one file, you can create a Makefile in
-the directory of that file and put commands necessary for the compilation in that
-Makefile.
+
+</p>   
+<h4 class='subsectionHead' id='rebuildsh-script-functionality'><span class='titlemark'>3.1   </span> <a id='x1-50003.1'></a><span class='ec-lmtt-10'>rebuild.sh </span>Script Functionality</h4>
+<!--   l. 186   --><p class='noindent'>I’ve provided a shell script named <a href='https://github.com/michal-h21/testblog/blob/main/texposts/rebuild.sh'>rebuild.sh</a>, included in the TeX files root directory.
+It uses <span class='ec-lmtt-10'>siterebuild </span>and compiles the changed TeX files automatically.
+</p><!--   l. 190   --><p class='indent'>   It first checks for the availability of the <span class='ec-lmtt-10'>siterebuild </span>command, using either a
+system-wide installation or a local version from the repository. The script then
+executes <span class='ec-lmtt-10'>siterebuild </span>with debug logging to identify modified LaTeX files that
+require recompilation.
+</p><!--   l. 195   --><p class='indent'>   Using a custom output format (<span class='obeylines-h'><code class='verb'>%dir@%file</code></span>), it extracts both the directory path
+and filename for each changed document. For each detected file, the script navigates
+to the corresponding directory and checks for a <span class='ec-lmtt-10'>Makefile</span>. If present, it uses the
+existing build system; otherwise, it directly invokes <span class='ec-lmtt-10'>make4ht </span>with publishing options
+to generate HTML output.
+                                                                  
+
+                                                                  
+</p><!--   l. 202   --><p class='indent'>   If you want to change options for <span class='ec-lmtt-10'>make4ht </span>used for the compilation, you can edit
+the <span class='ec-lmtt-10'>rebuild.sh </span>file. If you want to change options only for one file, you can create a
+Makefile in the directory of that file and put commands necessary for the compilation
+in that Makefile.
 </p>   
  
