@@ -4,43 +4,45 @@ jobs:
   build: 
    runs-on: ubuntu-latest 
    steps: 
-   - uses: actions/checkout@v4 
-     with:
-       fetch-depth: 0
-   - name: Checkout and sync output branch
+   - name: Checkout main branch
      uses: actions/checkout@v4
      with:
-       ref: html
-       path: output
        fetch-depth: 0
-   - name: Sync output with main branch
+   
+   - name: Checkout html branch
      run: |
-       cd output
+       git fetch origin html
+       git checkout html
        git config user.name "github-actions"
        git config user.email "github-actions@github.com"
-
-       # Přidat main jako remote
-       git remote add main-repo "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
-       git fetch main-repo main
-        
-       # Přepnout na větev html a merge změn z main
-       git checkout html
-       git merge main-repo/main --no-edit --strategy-option=theirs
-       
-       # Push změn
-       git push origin html
-   - name: restore timestamps
-     uses: chetan/git-restore-mtime-action@v2
+   
+   - name: Merge changes from main
+     run: |
+       git merge origin/main --no-edit --strategy-option=theirs
+   
+   - name: Restore timestamps
+     run: |
+       git ls-files -z | while read -d '' file; do
+         if [ -f "$file" ]; then
+           timestamp=$(git log --pretty=format:%cd -n 1 --date=iso -- "$file")
+           if [ -n "$timestamp" ]; then
+             touch -d "$timestamp" "$file"
+           fi
+         fi
+       done
+   
    - name: Checkout siterebuild
      uses: actions/checkout@v4
      with:
-      repository: michal-h21/siterebuild 
-      path: siterebuild
+       repository: michal-h21/siterebuild 
+       path: siterebuild
+   
    - uses: xu-cheng/texlive-action/full@v1
      with:
        run: |
          cd texposts
          ./rebuild.sh
+   
    - name: Autocommit generated files
      uses: stefanzweifel/git-auto-commit-action@v4
      with:
