@@ -180,11 +180,27 @@ It lists only the changed files. This is especially important
 if your blog grows up, as it would be wastefull to compile all source files 
 on each update.
 
-I've provided a shell script named \href{https://github.com/michal-h21/testblog/blob/main/texposts/rebuild.sh}{rebuild.sh},
+
+\subsection{\texttt{rebuild.sh} Script Functionality}
+
+I've provided a shell script named
+\href{https://github.com/michal-h21/testblog/blob/main/texposts/rebuild.sh}{rebuild.sh},
 included in the \TeX\ files root directory. It uses \texttt{siterebuild} and compiles the changed \TeX\ files automatically. 
 
-If you want to change options for \texttt{make4ht} used for the compilation, you can edit this file. If you want to 
-change options only for one file, you can create a Makefile in the directory of that file and put commands 
+It first checks for the availability of the \texttt{siterebuild} command, using
+either a system-wide installation or a local version from the repository. The
+script then executes \texttt{siterebuild} with debug logging to identify
+modified \LaTeX\ files that require recompilation.
+
+Using a custom output format (\verb|%dir@%file|), it extracts both the
+directory path and filename for each changed document. For each detected file,
+the script navigates to the corresponding directory and checks for a
+\texttt{Makefile}. If present, it uses the existing build system; otherwise, it
+directly invokes \texttt{make4ht} with publishing options to generate HTML
+output. 
+
+If you want to change options for \texttt{make4ht} used for the compilation, you can edit the \texttt{rebuild.sh} file. 
+If you want to change options only for one file, you can create a Makefile in the directory of that file and put commands 
 necessary for the compilation in that Makefile.
 
 
