@@ -14,7 +14,6 @@ You can find the YAML configuration in the
 \href{https://github.com/michal-h21/testblog/blob/main/.github/workflows/main.yml}{.github/workflows/main.yml}
 file.
 
-
 \tableofcontents
 
 \section{Problem: Git and Modification Times}
@@ -26,19 +25,41 @@ from the commit history.
 
 \subsection{Restoring Timestamps with GitHub Actions}
 
-The \href{https://github.com/chetan/git-restore-mtime-action}{\texttt{git-restore-mtime-action}} 
-can be used to recover accurate modification times for files in a GitHub workflow.
+We can restore modification times using a custom script that extracts timestamps from git history:
 
-To function correctly, it requires the full commit history, not just the latest commit.
+\begin{verbatim}
+- name: Restore timestamps
+  run: |
+    git ls-files -z | while read -d '' file; do
+      if [ -f "$file" ]; then
+        timestamp=$(git log --pretty=format:%cd -n 1 --date=iso -- "$file")
+        if [ -n "$timestamp" ]; then
+          touch -d "$timestamp" "$file"
+        fi
+      fi
+    done
+\end{verbatim}
+
+This requires the full commit history, not just the latest commit.
 You must ensure the following step is included in your GitHub Actions workflow:
 
 \begin{verbatim}
-- uses: actions/checkout@v2
+- uses: actions/checkout@v4
   with:
     fetch-depth: 0
 \end{verbatim}
 
-This fetches the complete Git history so the action can determine modification times correctly.
+This fetches the complete Git history so the script can determine modification times correctly.
+
+\section{Working with Multiple Branches}
+
+For better organization, we use two branches:
+\begin{itemize}
+  \item \texttt{main} branch: Contains source \LaTeX\ files and build scripts
+  \item \texttt{html} branch: Contains generated HTML files served by GitHub Pages
+\end{itemize}
+
+The workflow checks out both branches and synchronizes changes from \texttt{main} to \texttt{html} before compilation.
 
 \section{Compiling \LaTeX\ on GitHub}
 
@@ -67,37 +88,38 @@ Whether the \texttt{.published} file was created manually or by the \texttt{stat
 extension, make sure to commit it to the repository—GitHub Actions needs it to
 be present during the build.
 
+\subsection{Compilation with TexLive Action}
+
+The compilation process uses the \href{https://github.com/xu-cheng/texlive-action}{\texttt{xu-cheng/texlive-action}}
+which provides a full TeX Live environment. The workflow changes to the \texttt{texposts} directory
+and executes the \texttt{rebuild.sh} script. This script handles the compilation of modified
+\LaTeX\ documents into HTML format by processing only the files that have changed since
+the last build, ensuring efficient compilation of large documentation projects.
 
 \section{Committing Generated Files Back to GitHub}
 
 Every build generates HTML and CSS files, and these are automatically committed
-to the repository for publishing (e.g., with GitHub Pages), using the
+to the \texttt{html} branch for publishing with GitHub Pages, using the
 \href{https://github.com/stefanzweifel/git-auto-commit-action}{\texttt{git-auto-commit-action}}.
 
 A typical workflow step might look like this:
 
 \begin{verbatim}
-- uses: stefanzweifel/git-auto-commit-action@v5
+- name: Autocommit generated files
+  uses: stefanzweifel/git-auto-commit-action@v4
   with:
-    commit_message: "Update generated HTML files"
-    branch: main
+    commit_message: "Save generated files"
+    file_pattern: docs/*
+    branch: html
+    push_options: --force
 \end{verbatim}
 
-This commits and pushes the generated files to the \texttt{main} branch automatically, 
-making them available to GitHub Pages or other deployment mechanisms.
-
-After each build, it's important to pull the latest changes from GitHub into
-your local repository. These changes include newly generated or updated files
-(e.g., in \verb|docs/_posts/|) that were committed automatically by the GitHub Actions
-workflow.
-
-If you also generate the same output files locally, there is a risk of merge
-conflicts, since your local versions may differ from the ones produced on the
-server (even if logically equivalent).
+This commits and pushes the generated files to the \texttt{html} branch automatically, 
+making them available to GitHub Pages.
 
 \section{Configure Github Pages}
 
-To configure GitHub Pages to serve content from the \texttt{docs} directory in the \texttt{main} branch, follow these steps:
+To configure GitHub Pages to serve content from the \texttt{docs} directory in the \texttt{html} branch, follow these steps:
 
 \begin{enumerate}
   \item Open your repository on GitHub.
@@ -105,12 +127,11 @@ To configure GitHub Pages to serve content from the \texttt{docs} directory in t
   \item In the left-hand menu, select \textbf{Pages}.
   \item Under the \textbf{Source} section:
     \begin{itemize}
-      \item Set the branch to \texttt{main}.
+      \item Set the branch to \texttt{html}.
       \item Set the folder to \texttt{/docs}.
     \end{itemize}
   \item Click \textbf{Save}.
 \end{enumerate}
-
 
 \subsection*{Accessing your blog}
 
@@ -126,6 +147,19 @@ For example, if your GitHub username is \texttt{janedoe} and your repository is 
 \texttt{https://janedoe.github.io/tex-blog/}
 \end{quote}
 
+\section{Preventing Infinite Build Loops}
 
+To prevent infinite build loops when generated files are committed back to the repository,
+configure the workflow to ignore changes in the \texttt{docs/} directory:
+
+\begin{verbatim}
+on: 
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+\end{verbatim}
+
+This ensures that commits containing only generated files won't trigger new workflow runs.
 
 \end{document}
