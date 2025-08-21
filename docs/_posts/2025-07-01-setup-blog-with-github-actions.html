@@ -13,13 +13,15 @@ styles:
 - '2025-07-01-setup-blog-with-github-actions.css'
 time: 1751385889
 title: 'Setup Blog with GitHub Actions'
+updated: 1755804333
 ---
 
 
 <!--   l. 9   --><p class='indent'>   This article describes how to configure GitHub Actions to automatically compile
 LaTeX sources for a static blog built with tools like <span class='ec-lmtt-10'>make4ht </span>and Jekyll. It covers file
 tracking, automatic build triggering, and committing generated files back to the
-repository. You can find the YAML configuration in the <a href='https://github.com/michal-h21/testblog/blob/main/.github/workflows/main.yml'>.github/workflows/main.yml</a>
+repository.
+</p><!--   l. 13   --><p class='indent'>   You can find the YAML configuration in the <a href='https://github.com/michal-h21/testblog/blob/main/.github/workflows/main.yml'>.github/workflows/main.yml</a>
 file.
 
 </p>   
@@ -34,7 +36,7 @@ file.
 </div>   
 
 <h3 class='sectionHead' id='problem-git-and-modification-times'><span class='titlemark'>1   </span> <a id='x1-20001'></a>Problem: Git and Modification Times</h3>
-<!--   l. 21   --><p class='noindent'>Git does not preserve file modification times when cloning or checking out
+<!--   l. 22   --><p class='noindent'>Git does not preserve file modification times when cloning or checking out
 repositories. However, tools like <span class='ec-lmtt-10'>make4ht </span>or other build systems may rely on these
 timestamps to detect changed files. To compile only updated LaTeX sources, we need
 to <span class='ec-lmri-10'>restore original modification times </span>from the commit history.
@@ -44,7 +46,7 @@ to <span class='ec-lmri-10'>restore original modification times </span>from the 
                                                                   
 </p>   
 <h4 class='subsectionHead' id='restoring-timestamps-with-github-actions'><span class='titlemark'>1.1   </span> <a id='x1-30001.1'></a>Restoring Timestamps with GitHub Actions</h4>
-<!--   l. 28   --><p class='noindent'>The <a href='https://github.com/chetan/git-restore-mtime-action'><span class='ec-lmtt-10'>git-restore-mtime-action</span></a> can be used to recover accurate modification times
+<!--   l. 29   --><p class='noindent'>The <a href='https://github.com/chetan/git-restore-mtime-action'><span class='ec-lmtt-10'>git-restore-mtime-action</span></a> can be used to recover accurate modification times
 for files in a GitHub workflow.
 </p><!--   l. 32   --><p class='indent'>   To function correctly, it requires the full commit history, not just the latest
 commit. You must ensure the following step is included in your GitHub Actions
