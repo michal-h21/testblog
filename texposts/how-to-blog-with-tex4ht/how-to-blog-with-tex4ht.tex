@@ -6,44 +6,23 @@
 \begin{document}
 \maketitle
 
-This post is a part of series on how to set up
-\href{https://tug.org/tex4ht/}{TeX4ht}, \LaTeX\ to XML converter
-for use with Static Site Generators. We will discuss
-how to configure it to produce suitable HTML in this article.
+This post is part of a series on how to set up \href{https://tug.org/tex4ht/}{TeX4ht}, the \LaTeX\ to XML converter, for use with Static Site Generators. In this article, we'll discuss how to configure it to produce suitable HTML.
 
 \tableofcontents
 
 \section{Static site extension for make4ht}
 
-Conversion process used by \TeX4ht is quite complex. It needs to 
-compile \LaTeX\ file to a DVI file with special instructions 
-inserted by \texttt{tex4ht.sty} package. This DVI file is then 
-processed by \texttt{tex4ht} command, that produces HTML or XML files,
-and instructions for the last command, \texttt{t4ht}, which produces
-CSS files and pictures. 
+The conversion process used by \TeX4ht is quite complex. It requires compiling a \LaTeX\ file to a DVI file with special instructions inserted by the \texttt{tex4ht.sty} package. This DVI file is then processed by the \texttt{tex4ht} command, which produces HTML or XML files, along with instructions for the final command, \texttt{t4ht}, which generates CSS files and images.
 
+Traditionally, this process was handled by the \texttt{htlatex} script, but it had many weaknesses. The currently recommended build tool is \makeht. You can find some details about the differences between \texttt{htlatex} and \makeht\ in the \href{https://www.kodymirus.cz/make4ht/make4ht-doc.html#difference-of-texttt-makeht}{\makeht\ documentation}.
 
-Traditionally, this process was handled 
-by the \texttt{htlatex} script, but it had many weaknesses, so 
-the currently recommended build tool is \makeht. 
-You can find some details about \texttt{htlatex} and \makeht\ 
-differences in the 
-\href{https://www.kodymirus.cz/make4ht/make4ht-doc.html#difference-of-texttt-makeht}
-{\makeht\ documentation}.
+Among the features provided by \makeht\ are Lua build files, post-processing filters, and extensions. We can use these features to transform HTML files produced by \TeX4ht into the format required by static site generators.
 
-Among features provided by \makeht\ are Lua build files, post-processing filters, and extensions.
-We can use these features to transform HTML files produced by \TeX4ht to form required by 
-static site generators.
+Filters can clean up the generated files and fix common issues that are difficult to address at the \TeX\ level. They can be applied either from Lua build files or using \makeht\ extensions.
 
-Filters can clean-up the generated files, and fix some common issues that 
-are hard to fix on the \TeX\ level. They can be applyed either from 
-Lua build files, or using \makeht\ extensions. 
-
-\makeht\ provides an extension that aims at support for static site generators. We can show the usage
-on a simple example:
+\makeht\ provides an extension that specifically supports static site generators. Let's demonstrate its usage with a simple example:
 
 \begin{verbatim}
-
 \documentclass{article}
 \begin{document}
 \title{Hello world test}
@@ -54,50 +33,43 @@ This is my test post.
 \end{document}
 \end{verbatim}
 
-You can use a following command to generate file suitable for static site generators:
+You can use the following command to generate a file suitable for static site generators:
 
 \begin{verbatim}
 make4ht -f html5+staticsite filename.tex
 \end{verbatim}
 
-By default, \texttt{staticsite} extension produces file named as \verb|YYYY-MM-DD-<filename>|,
-this example can be named as \texttt{2021-07-25-filename.html}. It is not 
-ordinary HTML file, but it contains YAML header with document metadata:
+By default, the \texttt{staticsite} extension produces a file named as \verb|YYYY-MM-DD-<filename>|, so this example might be named \texttt{2021-07-25-filename.html}. It's not an ordinary HTML file, but it contains a YAML header with document metadata:
 
 \begin{verbatim}
 ---
 meta:
 - charset: 'utf-8'
 - name: 'generator'
-  content: 'TeX4ht (https://tug.org/tex4ht/)'
+  content: 'TeX4ht (https://tug.org/tex4ht/)'
 - name: 'viewport'
-  content: 'width=device-width,initial-scale=1'
+  content: 'width=device-width,initial-scale=1'
 - name: 'src'
-  content: '2021-07-18-hello-world.tex'
+  content: '2021-07-18-hello-world.tex'
 time: 1626619562
 updated: 1627244699
 styles:
 - '2021-07-18-hello-world.css'
 title: 'Hello world test'
 ---
-
-   
-<!--  l. 7  --><p class='indent'>   This is my test post.
+   
+<p class='indent'>   This is my test post.
 </p>
-    
+    
 \end{verbatim}
 
-Although most static site generators expects Markdown, they also accept HTML files in this form.
-When \texttt{staticsite} is used for the first time, it creates file with a \texttt{.published}
-extension. It contains timestamp of the moment when it was used for the first time. This 
-timestamp is used for the date part of the generated filename.
+Although most static site generators expect Markdown, they also accept HTML files in this format. When \texttt{staticsite} is used for the first time, it creates a file with a \texttt{.published} extension. This file contains a timestamp of the moment it was first used. This timestamp is then used for the date part of the generated filename.
 
 \section{Copy the generated files to the static site}
 
-The \texttt{staticsite} extension can copy the generated files to places where the static site
-generator expects files to process.
+The \texttt{staticsite} extension can copy the generated files to the locations where the static site generator expects to find files to process.
 
-Let's say, that we have the following directory structure:
+Let's say we have the following directory structure, suitable for the \href{https://jekyllrb.com/}{Jekyll} static site generator:
 
 \begin{verbatim}
 blog/
@@ -106,47 +78,51 @@ blog/
 ...... first_post.tex
 .... second_post/
 ...... second_post.tex
-.. html_root/
+.. docs/_posts/
 .. .make4ht
 \end{verbatim}
 
+The blog's main directory contains the file \texttt{.make4ht}, and two
+directories: \verb|texposts_root| and \verb|docs/_posts|. Jekyll has built-in
+support for blogs. It uses all HTML documents contained within the \verb|_posts|
+subdirectory. We'll then use the \texttt{docs} directory as the source directory for
+GitHub Pages.
 
-The blog's main directory contains file \texttt{.make4ht}, and two directories: \verb|texposts_root|
-and \verb|html_root|. 
-
-The source \LaTeX\ files are stored in subdirectories of \verb|texposts_root|. We want to copy the
-generated HTML files to \verb|html_root| automatically. The \texttt{staticsite} extension can be 
-configured to do that using the \texttt{.make4ht} configuration file. This file is meant for passing
-of shared configuration to \makeht, like in this case, where we want to specify to copy all generated
-files to the \verb|html_root| directory.
+The source \LaTeX\ files are stored in subdirectories of \verb|texposts_root|.
+We want to automatically copy the generated HTML files to \verb|docs/_posts/|.
+The \texttt{staticsite} extension can be configured to do this using the
+\texttt{.make4ht} configuration file. This file is used to pass shared
+configuration to \makeht, such as specifying that all generated files should be
+copied to the \verb|docs/_posts/| directory.
 
 The basic format of the \texttt{.make4ht} file necessary for the \texttt{staticsite} extension can look like this:
 
 \begin{verbatim}
-
 filter_settings "staticsite" {
-  site_root =  "path/to/blogging_engine/html_dir"
-  header = {
-     layout="post",
-  },
+  site_root = "../../docs/_posts/"
+  header = {
+    layout="post",
+  },
 }
 
 if mode=="publish" then
-  Make:enable_extension "staticsite"
-  Make:htlatex {}
-  Make:htlatex {}
+  Make:enable_extension "staticsite"
+  Make:htlatex {}
+  Make:htlatex {}
 end
 \end{verbatim}
 
+The \verb|filter_settings| function passes a table with settings for the
+extension. The \verb|site_root| field specifies the path to the directory for
+the generated files. It can be specified in a relative form, as in this
+example. Two \verb|..| are necessary because the output directory is located
+two levels up in the directory hierarchy from the directory of the compiled \TeX\ file.
 
-The \verb|filter_settings| function passes table with settings for the extension. The \verb|site_root| field specifies path
-to the generated files directory. It can be specified in the relative form, as in the example. Two \verb|..| are necessary,
-as the output directory is placed two levels up in the directory hierarchy.
-
-We also specify the build sequence for the site generation. If we pass the \verb|--mode publish| option to \makeht, the
-\texttt{staticsite} extension will be enabled, and \LaTeX\ will be executed twice. This is important, because the 
-contents of \verb|\title| and \verb|\author| commands are available only in the second \LaTeX\ run. They are then available
-in the YAML header.
+We also specify the build sequence for site generation. If we pass the
+\verb|--mode publish| option to \makeht, the \texttt{staticsite} extension will
+be enabled, and \LaTeX\ will be executed twice. This is important because the
+contents of the \verb|\title| and \verb|\author| commands are only available in
+the second \LaTeX\ run. They are then included in the YAML header.
 
 You can now execute the following command in the \verb|texposts_root/first_post| directory:
 
@@ -154,38 +130,49 @@ You can now execute the following command in the \verb|texposts_root/first_post|
 make4ht -m publish first_post.tex
 \end{verbatim}
 
+This will automatically load the \texttt{staticsite} extension, thanks to our \texttt{.make4ht} file, so it's not necessary to enable it on the command line. The generated HTML and CSS files will be placed in the \verb|docs/_posts/| directory.
 
-This will load the \texttt{staticsite} automatically, thanks to our \texttt{.make4ht} file, so it is not necessary to enable it 
-on the command line. The generated HTML and CSS files will be placed in the \verb|html_root| directory.
+In the next post, we will look at how to use this setup with Jekyll to create a simple blog.
 
-We will take a look at how to use this setup together with Jekyll to create a simple blog in the next post.
+The \href{https://github.com/michal-h21/testblog/blob/main/.make4ht}{.make4ht} file provided in this blog repository also adds a new function that writes a \verb|<input>.published| file. This file is used by the \texttt{staticsite} extension to find the original publication date of a post. You should add the \texttt{published} file to your source repository so the correct date is used in future updates of the site.
 
-The \href{https://github.com/michal-h21/testblog/blob/main/.make4ht}{.make4ht}
-file provided in this blog repository allso adds a new function that will write 
-a \verb|<input>.pubslished| file. This file is used by by the \texttt{staticsite} extension to find the original 
-date of the publication of a post. You should add the \texttt{pubslished} file
-to your source repository, so the correct date of the publication is used in
-next updates of the site.
+\section{Automatic compilation of changed \LaTeX\ files}
 
+Instead of compiling documents manually after each change, you can automate the build process using the \href{https://github.com/michal-h21/siterebuild}{siterebuild} script.
 
-
-\section{Automatic compilation of the changed \LaTeX\ files}
-
-Instead of compiling the documents manually after each change, 
-you can automate the build process using the 
-\href{https://github.com/michal-h21/siterebuild}{siterebuild} script.
-
-This tool finds all \TeX\ files in your document directory tree for changes.
-It lists only the changed files. This is especially important 
-if your blog grows up, as it would be wastefull to compile all source files 
-on each update.
-
+This tool checks all \TeX\ files in your document directory tree for changes and lists only the modified files. This is especially important as your blog grows, as it would be wasteful to compile all source files on every update.
 
 \subsection{\texttt{rebuild.sh} Script Functionality}
 
-I've provided a shell script named
-\href{https://github.com/michal-h21/testblog/blob/main/texposts/rebuild.sh}{rebuild.sh},
-included in the \TeX\ files root directory. It uses \texttt{siterebuild} and compiles the changed \TeX\ files automatically. 
+I've provided a shell script named \href{https://github.com/michal-h21/testblog/blob/main/texposts/rebuild.sh}{rebuild.sh}, which is included in the \TeX\ files root directory. It uses \texttt{siterebuild} to automatically compile the changed \TeX\ files:
+
+\begin{verbatim}
+#!/bin/sh
+if ! command -v siterebuild &> /dev/null
+then
+SITEREBUILD=../siterebuild/siterebuild
+else
+SITEREBUILD=siterebuild
+fi
+
+export TEXINPUTS=.:/root/texmf//: 
+
+$SITEREBUILD -l debug
+# we use the custom output format for siterebuild, to be able to easily extract directory and filename in the later steps
+for i in `$SITEREBUILD -o %dir@%file`
+do
+  texdir=`echo $i | cut -d@ -f1 -`
+  texfile=`echo $i | cut -d@ -f2 -`
+  # either execute Makefile, or run make4ht directly
+  cd "$texdir"
+  if test -f Makefile; then
+    make
+  else
+    TEXINPUTS=.:/root/texmf//: make4ht -a debug -m publish -l "$texfile"
+  fi
+  cd ..
+done
+\end{verbatim}
 
 It first checks for the availability of the \texttt{siterebuild} command, using
 either a system-wide installation or a local version from the repository. The
@@ -195,13 +182,13 @@ modified \LaTeX\ files that require recompilation.
 Using a custom output format (\verb|%dir@%file|), it extracts both the
 directory path and filename for each changed document. For each detected file,
 the script navigates to the corresponding directory and checks for a
-\texttt{Makefile}. If present, it uses the existing build system; otherwise, it
-directly invokes \texttt{make4ht} with publishing options to generate HTML
-output. 
+\texttt{Makefile}. If one is present, it uses the existing build system;
+otherwise, it directly invokes \texttt{make4ht} with publishing options to
+generate the HTML output.
 
-If you want to change options for \texttt{make4ht} used for the compilation, you can edit the \texttt{rebuild.sh} file. 
-If you want to change options only for one file, you can create a Makefile in the directory of that file and put commands 
-necessary for the compilation in that Makefile.
-
+If you want to change the options for \texttt{make4ht} used for the
+compilation, you can edit the \texttt{rebuild.sh} file. If you want to change
+options for only one file, you can create a \texttt{Makefile} in that file's
+directory and put the necessary compilation commands in that \texttt{Makefile}.
 
 \end{document}
