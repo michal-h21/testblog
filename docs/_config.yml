@@ -22,7 +22,7 @@ title: TeX4ht Blog Sample
 email: michal.h21@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   This site provides sample configuration for blog authored in LaTeX
-# baseurl: "testblog" # the subpath of your site, e.g. /blog
+baseurl: "/testblog" # the subpath of your site, e.g. /blog
 url: "https://www.kodymirus.cz" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: michalh21
 github_username:  michal-h21
