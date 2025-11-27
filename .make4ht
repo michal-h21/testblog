@@ -32,7 +32,5 @@ if mode=="publish" then
   -- this will create the "<jobname>.pubslished file, if it doesn't exist
   Make:enable_extension "staticsite"
   -- Make:match("html$", domprocess)
-  Make:htlatex {}
-  Make:htlatex {}
-  Make:htlatex {}
+  Make:autohtlatex {}
 end
