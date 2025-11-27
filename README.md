@@ -13,6 +13,13 @@ To start a new blog, you need to remove the documentation files first, using the
 $ find texposts -mindepth 1 -maxdepth 1 -type d \
   ! -name cookiecutter-post \
   -exec rm -rf {} +
+$ git add -u texposts
+$ git commit -m "Clean start for a new blog"
+$ git push
+```
+
+After that, you can create new blog posts. 
+
 
 
 
